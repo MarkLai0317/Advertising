@@ -1,0 +1,22 @@
+# with-expecter: True
+# inpackage: False
+# dir: "mocks"
+# mockname: "{{.InterfaceName}}Mock"
+# outpkg: "mocks"
+# filename: "{{.InterfaceName}}_mock.go"
+# all: True
+# packages:
+#   github.com/Advertising/advertisement:
+#     config:
+#       recursive: True
+with-expecter: True
+inpackage: False
+dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
+mockname: "{{.InterfaceName}}"
+outpkg: "{{.PackageName}}"
+filename: "{{.InterfaceName}}.go"
+all: True
+packages:
+  github.com/Advertising/advertisement:
+    config:
+      recursive: True
