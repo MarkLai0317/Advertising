@@ -24,7 +24,7 @@ jobs:
             - /home/circleci/go/pkg/mod
       - run:
           name: Run unit tests
-          command: gotestsum --format testname --junitfile junit.xml --  -v -cover -tags=unit ./...
+          command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover  -tags=unit ./...
       - store_test_results:
           path: .
 
@@ -42,7 +42,7 @@ jobs:
       
       - run:
           name: Run integration tests
-          command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover -tags=integration ./...
+          command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -p 1 -v -cover -tags=integration ./...
       - store_test_results:
           path: .
       
