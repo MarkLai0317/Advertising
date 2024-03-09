@@ -1,6 +1,11 @@
 # This config was automatically generated from your source code
 # Stacks detected: deps:go:.
 version: 2.1
+
+
+orbs: 
+  gh: circleci/github-cli@2.1.0
+
 jobs:
   test-go:
    
