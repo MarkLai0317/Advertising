@@ -1,25 +1,24 @@
-package service_test
+package service_test_cases
 
 import (
 	"fmt"
 	"time"
 
-	ad "github.com/MarkLai0317/Advertising/advertisement"
+	"github.com/MarkLai0317/Advertising/ad"
 )
 
-type Expects struct {
+type ValidateAdvertisementExpects struct {
 	ExpectResultAd ad.Advertisement
 	ExpectError    error
 }
 
-type TestCase struct {
+type ValidateAdvertisementTestCase struct {
 	Ad      ad.Advertisement
-	Setup   func()
-	Expects Expects
+	Expects ValidateAdvertisementExpects
 }
 
-func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []ad.CountryCode, allPlatforms []ad.PlatformType) map[string]TestCase {
-	testCases := map[string]TestCase{
+func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []ad.CountryCode, allPlatforms []ad.PlatformType) map[string]ValidateAdvertisementTestCase {
+	testCases := map[string]ValidateAdvertisementTestCase{
 		"all valid": {
 
 			Ad: ad.Advertisement{
@@ -35,7 +34,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
@@ -66,7 +65,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 3, 0, 0, 0, 0, time.UTC),
@@ -97,7 +96,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
@@ -118,8 +117,8 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 			Ad: ad.Advertisement{
 				Title: "",
 			},
-			Expects: Expects{
-				ExpectError: fmt.Errorf("Title cannot be empty"),
+			Expects: ValidateAdvertisementExpects{
+				ExpectError: fmt.Errorf("title cannot be empty"),
 			},
 		},
 
@@ -129,8 +128,8 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
 				EndAt:   time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 			},
-			Expects: Expects{
-				ExpectError: fmt.Errorf("EndAt cannot be smaller than current Time %s", time.Now().Format("2006-01-02T15:04:05.000Z")),
+			Expects: ValidateAdvertisementExpects{
+				ExpectError: fmt.Errorf("endAt cannot be smaller than current Time %s", time.Now().Format("2006-01-02T15:04:05.000Z")),
 			},
 		},
 
@@ -140,8 +139,8 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				StartAt: time.Date(2024, 1, 5, 0, 0, 0, 0, time.UTC),
 				EndAt:   time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
 			},
-			Expects: Expects{
-				ExpectError: fmt.Errorf("EndAt cannot be smaller than StartAt"),
+			Expects: ValidateAdvertisementExpects{
+				ExpectError: fmt.Errorf("endAt cannot be smaller than StartAt"),
 			},
 		},
 		"invalid Age": {
@@ -154,8 +153,8 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 					AgeEnd:   200,
 				},
 			},
-			Expects: Expects{
-				ExpectError: fmt.Errorf("Age should be in range 1 to 100"),
+			Expects: ValidateAdvertisementExpects{
+				ExpectError: fmt.Errorf("age should be in range 1 to 100"),
 			},
 		},
 
@@ -174,7 +173,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
@@ -206,7 +205,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
@@ -237,7 +236,7 @@ func ValidateAdvertisementTestCases(allGenders []ad.GenderType, allCountries []a
 				},
 			},
 
-			Expects: Expects{
+			Expects: ValidateAdvertisementExpects{
 				ExpectResultAd: ad.Advertisement{
 					Title:   "Test Title",
 					StartAt: time.Date(2024, 1, 4, 0, 0, 0, 0, time.UTC),
