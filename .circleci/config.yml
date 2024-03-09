@@ -24,9 +24,9 @@ jobs:
             - /home/circleci/go/pkg/mod
       - run:
           name: Run unit tests
-          command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover -tags=unit ./...
+          command: gotestsum --format testname --junitfile junit.xml --  -v -cover -tags=unit ./...
       - store_test_results:
-          path: junit.xml
+          path: .
 
          # Optional: Install dockerize or a similar tool to wait for the database to be ready
       - run:
@@ -44,7 +44,7 @@ jobs:
           name: Run integration tests
           command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover -tags=integration ./...
       - store_test_results:
-          path: junit.xml
+          path: .
       
   deploy:
     # This is an example deploy job, not actually used by the workflow
