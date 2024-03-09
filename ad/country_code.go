@@ -1,4 +1,4 @@
-package advertisement
+package ad
 
 type CountryCode string
 
