@@ -29,7 +29,7 @@ func TestMongoIntegrationTestSuite(t *testing.T) {
 	suite.Run(t, &MongoIntegrationTestSuite{})
 }
 
-const mongoUri = "mongodb://mark:markpwd@localhost:27018"
+const mongoUri = "mongodb://mark:markpwd@localhost:27017"
 
 func (its *MongoIntegrationTestSuite) SetupSuite() {
 	mongoClientOptions := options.Client().ApplyURI(mongoUri)

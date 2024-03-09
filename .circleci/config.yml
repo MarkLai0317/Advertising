@@ -41,7 +41,7 @@ jobs:
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
       
       - run:
-          name: Run unit tests
+          name: Run integration tests
           command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover -tags=integration ./...
       - store_test_results:
           path: junit.xml
