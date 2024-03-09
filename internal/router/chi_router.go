@@ -2,11 +2,11 @@ package router
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -30,15 +30,36 @@ func (chiRouter *ChiRouter) Post(path string, handlerFunc http.HandlerFunc) {
 }
 
 // Use now accepts a pathPrefix. Middleware is applied only to paths with pathPrefix
-func (chiRouter *ChiRouter) Use(pathPrefix string, middleware MiddlewareFunc) {
-	if pathPrefix == "" { // If no pathPrefix is specified, apply middleware globally.
+// func (chiRouter *ChiRouter) Use(pathPrefix string, middleware MiddlewareFunc) {
+// 	if pathPrefix == "" { // If no pathPrefix is specified, apply middleware globally.
+// 		chiRouter.Router.Use(func(next http.Handler) http.Handler {
+// 			return middleware(next.ServeHTTP)
+// 		})
+// 	} else { // Apply middleware only to paths with the specified prefix.
+// 		chiRouter.Router.Route(pathPrefix, func(r chi.Router) {
+// 			r.Use(func(next http.Handler) http.Handler {
+// 				return middleware(next.ServeHTTP)
+// 			})
+// 		})
+// 	}
+// }
+
+func (chiRouter *ChiRouter) Use(pathPrefix string, middleware func(http.Handler) http.Handler) {
+	if pathPrefix == "" {
+		// Apply middleware globally
+		chiRouter.Router.Use(middleware)
+	} else {
+		// Apply middleware only to routes with the specified pathPrefix.
+		// This uses a workaround to check the request path and decide if the middleware should be applied.
 		chiRouter.Router.Use(func(next http.Handler) http.Handler {
-			return middleware(next.ServeHTTP)
-		})
-	} else { // Apply middleware only to paths with the specified prefix.
-		chiRouter.Router.Route(pathPrefix, func(r chi.Router) {
-			r.Use(func(next http.Handler) http.Handler {
-				return middleware(next.ServeHTTP)
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if strings.HasPrefix(r.URL.Path, pathPrefix) {
+					// Apply the middleware if the path prefix matches
+					middleware(next).ServeHTTP(w, r)
+				} else {
+					// Skip the middleware and proceed to the next handler
+					next.ServeHTTP(w, r)
+				}
 			})
 		})
 	}
@@ -47,10 +68,12 @@ func (chiRouter *ChiRouter) Use(pathPrefix string, middleware MiddlewareFunc) {
 // default timeout for read and write
 const TIMEOUT = 30 * time.Second
 
-func (chiRouter *ChiRouter) ListenAndServe(address string, options ...ServerOption) error {
+func (chiRouter *ChiRouter) ListenAndServe(port string, options ...ServerOption) error {
 	server := &http.Server{
-		Addr:    address,
-		Handler: chiRouter.Router, // chi.Mux implements http.Handler
+		ReadTimeout:  TIMEOUT,
+		WriteTimeout: TIMEOUT,
+		Addr:         ":" + port,
+		Handler:      chiRouter.Router, // chi.Mux implements http.Handler
 	}
 
 	// Apply each provided ServerOption to the http.Server instance
@@ -70,7 +93,7 @@ func (chiRouter *ChiRouter) ListenAndServe(address string, options ...ServerOpti
 		}
 	}()
 
-	log.Println(fmt.Sprintf("Service listening on %s", address))
+	log.Printf("Service listening on %s", port)
 
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
 		return err

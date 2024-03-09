@@ -17,6 +17,6 @@ outpkg: "{{.PackageName}}"
 filename: "{{.InterfaceName}}.go"
 all: True
 packages:
-  github.com/Advertising/advertisement:
+  github.com/MarkLai0317/Advertising/ad:
     config:
       recursive: True

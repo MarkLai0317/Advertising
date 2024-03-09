@@ -3,8 +3,7 @@
 package controller
 
 import (
-	advertisement "github.com/MarkLai0317/Advertising/advertisement"
-	controller "github.com/MarkLai0317/Advertising/advertisement/controller"
+	ad "github.com/MarkLai0317/Advertising/ad"
 
 	http "net/http"
 
@@ -25,27 +24,27 @@ func (_m *DataTransferer) EXPECT() *DataTransferer_Expecter {
 }
 
 // AdvertisementSliceToJSON provides a mock function with given fields: ads
-func (_m *DataTransferer) AdvertisementSliceToJSON(ads []advertisement.Advertisement) (*controller.AdvertisementResponse, error) {
+func (_m *DataTransferer) AdvertisementSliceToJSON(ads []ad.Advertisement) ([]byte, error) {
 	ret := _m.Called(ads)
 
 	if len(ret) == 0 {
 		panic("no return value specified for AdvertisementSliceToJSON")
 	}
 
-	var r0 *controller.AdvertisementResponse
+	var r0 []byte
 	var r1 error
-	if rf, ok := ret.Get(0).(func([]advertisement.Advertisement) (*controller.AdvertisementResponse, error)); ok {
+	if rf, ok := ret.Get(0).(func([]ad.Advertisement) ([]byte, error)); ok {
 		return rf(ads)
 	}
-	if rf, ok := ret.Get(0).(func([]advertisement.Advertisement) *controller.AdvertisementResponse); ok {
+	if rf, ok := ret.Get(0).(func([]ad.Advertisement) []byte); ok {
 		r0 = rf(ads)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*controller.AdvertisementResponse)
+			r0 = ret.Get(0).([]byte)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func([]advertisement.Advertisement) error); ok {
+	if rf, ok := ret.Get(1).(func([]ad.Advertisement) error); ok {
 		r1 = rf(ads)
 	} else {
 		r1 = ret.Error(1)
@@ -60,46 +59,46 @@ type DataTransferer_AdvertisementSliceToJSON_Call struct {
 }
 
 // AdvertisementSliceToJSON is a helper method to define mock.On call
-//   - ads []advertisement.Advertisement
+//   - ads []ad.Advertisement
 func (_e *DataTransferer_Expecter) AdvertisementSliceToJSON(ads interface{}) *DataTransferer_AdvertisementSliceToJSON_Call {
 	return &DataTransferer_AdvertisementSliceToJSON_Call{Call: _e.mock.On("AdvertisementSliceToJSON", ads)}
 }
 
-func (_c *DataTransferer_AdvertisementSliceToJSON_Call) Run(run func(ads []advertisement.Advertisement)) *DataTransferer_AdvertisementSliceToJSON_Call {
+func (_c *DataTransferer_AdvertisementSliceToJSON_Call) Run(run func(ads []ad.Advertisement)) *DataTransferer_AdvertisementSliceToJSON_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].([]advertisement.Advertisement))
+		run(args[0].([]ad.Advertisement))
 	})
 	return _c
 }
 
-func (_c *DataTransferer_AdvertisementSliceToJSON_Call) Return(_a0 *controller.AdvertisementResponse, _a1 error) *DataTransferer_AdvertisementSliceToJSON_Call {
+func (_c *DataTransferer_AdvertisementSliceToJSON_Call) Return(_a0 []byte, _a1 error) *DataTransferer_AdvertisementSliceToJSON_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *DataTransferer_AdvertisementSliceToJSON_Call) RunAndReturn(run func([]advertisement.Advertisement) (*controller.AdvertisementResponse, error)) *DataTransferer_AdvertisementSliceToJSON_Call {
+func (_c *DataTransferer_AdvertisementSliceToJSON_Call) RunAndReturn(run func([]ad.Advertisement) ([]byte, error)) *DataTransferer_AdvertisementSliceToJSON_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // JSONToAdvertisement provides a mock function with given fields: req
-func (_m *DataTransferer) JSONToAdvertisement(req *http.Request) (*advertisement.Advertisement, error) {
+func (_m *DataTransferer) JSONToAdvertisement(req *http.Request) (*ad.Advertisement, error) {
 	ret := _m.Called(req)
 
 	if len(ret) == 0 {
 		panic("no return value specified for JSONToAdvertisement")
 	}
 
-	var r0 *advertisement.Advertisement
+	var r0 *ad.Advertisement
 	var r1 error
-	if rf, ok := ret.Get(0).(func(*http.Request) (*advertisement.Advertisement, error)); ok {
+	if rf, ok := ret.Get(0).(func(*http.Request) (*ad.Advertisement, error)); ok {
 		return rf(req)
 	}
-	if rf, ok := ret.Get(0).(func(*http.Request) *advertisement.Advertisement); ok {
+	if rf, ok := ret.Get(0).(func(*http.Request) *ad.Advertisement); ok {
 		r0 = rf(req)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*advertisement.Advertisement)
+			r0 = ret.Get(0).(*ad.Advertisement)
 		}
 	}
 
@@ -130,58 +129,44 @@ func (_c *DataTransferer_JSONToAdvertisement_Call) Run(run func(req *http.Reques
 	return _c
 }
 
-func (_c *DataTransferer_JSONToAdvertisement_Call) Return(_a0 *advertisement.Advertisement, _a1 error) *DataTransferer_JSONToAdvertisement_Call {
+func (_c *DataTransferer_JSONToAdvertisement_Call) Return(_a0 *ad.Advertisement, _a1 error) *DataTransferer_JSONToAdvertisement_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *DataTransferer_JSONToAdvertisement_Call) RunAndReturn(run func(*http.Request) (*advertisement.Advertisement, error)) *DataTransferer_JSONToAdvertisement_Call {
+func (_c *DataTransferer_JSONToAdvertisement_Call) RunAndReturn(run func(*http.Request) (*ad.Advertisement, error)) *DataTransferer_JSONToAdvertisement_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // QueryToClient provides a mock function with given fields: req
-func (_m *DataTransferer) QueryToClient(req *http.Request) (*advertisement.Client, int, int, error) {
+func (_m *DataTransferer) QueryToClient(req *http.Request) (*ad.Client, error) {
 	ret := _m.Called(req)
 
 	if len(ret) == 0 {
 		panic("no return value specified for QueryToClient")
 	}
 
-	var r0 *advertisement.Client
-	var r1 int
-	var r2 int
-	var r3 error
-	if rf, ok := ret.Get(0).(func(*http.Request) (*advertisement.Client, int, int, error)); ok {
+	var r0 *ad.Client
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*http.Request) (*ad.Client, error)); ok {
 		return rf(req)
 	}
-	if rf, ok := ret.Get(0).(func(*http.Request) *advertisement.Client); ok {
+	if rf, ok := ret.Get(0).(func(*http.Request) *ad.Client); ok {
 		r0 = rf(req)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*advertisement.Client)
+			r0 = ret.Get(0).(*ad.Client)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(*http.Request) int); ok {
+	if rf, ok := ret.Get(1).(func(*http.Request) error); ok {
 		r1 = rf(req)
 	} else {
-		r1 = ret.Get(1).(int)
+		r1 = ret.Error(1)
 	}
 
-	if rf, ok := ret.Get(2).(func(*http.Request) int); ok {
-		r2 = rf(req)
-	} else {
-		r2 = ret.Get(2).(int)
-	}
-
-	if rf, ok := ret.Get(3).(func(*http.Request) error); ok {
-		r3 = rf(req)
-	} else {
-		r3 = ret.Error(3)
-	}
-
-	return r0, r1, r2, r3
+	return r0, r1
 }
 
 // DataTransferer_QueryToClient_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryToClient'
@@ -202,12 +187,12 @@ func (_c *DataTransferer_QueryToClient_Call) Run(run func(req *http.Request)) *D
 	return _c
 }
 
-func (_c *DataTransferer_QueryToClient_Call) Return(client *advertisement.Client, offset int, limit int, err error) *DataTransferer_QueryToClient_Call {
-	_c.Call.Return(client, offset, limit, err)
+func (_c *DataTransferer_QueryToClient_Call) Return(client *ad.Client, err error) *DataTransferer_QueryToClient_Call {
+	_c.Call.Return(client, err)
 	return _c
 }
 
-func (_c *DataTransferer_QueryToClient_Call) RunAndReturn(run func(*http.Request) (*advertisement.Client, int, int, error)) *DataTransferer_QueryToClient_Call {
+func (_c *DataTransferer_QueryToClient_Call) RunAndReturn(run func(*http.Request) (*ad.Client, error)) *DataTransferer_QueryToClient_Call {
 	_c.Call.Return(run)
 	return _c
 }

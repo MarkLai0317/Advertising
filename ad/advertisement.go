@@ -1,4 +1,4 @@
-package advertisement
+package ad
 
 import (
 	"time"
@@ -93,9 +93,16 @@ type Client struct {
 	Gender   GenderType
 	Country  CountryCode
 	Platform PlatformType
+	Offset   int
+	Limit    int
+
+	AgeMissing      bool
+	GenderMissing   bool
+	CountryMissing  bool
+	PlatformMissing bool
 }
 
 type UseCase interface {
-	Create(ad *Advertisement) error
-	Advertise(client *Client, offset int, limit int) ([]Advertisement, error)
+	CreateAd(ad *Advertisement) error
+	Advertise(client *Client) ([]Advertisement, error)
 }
