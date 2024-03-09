@@ -28,17 +28,24 @@ jobs:
       - store_test_results:
           path: junit.xml
 
-          # Optional: Install dockerize or a similar tool to wait for the database to be ready
-      # - run:
-      #     name: Install dockerize
-      #     command: |
-      #       sudo wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
-      #       sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
-      #       sudo rm dockerize-linux-amd64-v0.6.1.tar.gz
+         # Optional: Install dockerize or a similar tool to wait for the database to be ready
+      - run:
+          name: Install dockerize
+          command: |
+            sudo wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
+            sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
+            sudo rm dockerize-linux-amd64-v0.6.1.tar.gz
 
-      # - run:
-      #     name: Wait for DB
-      #     command: dockerize -wait tcp://localhost:20 -timeout 1m
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      
+      - run:
+          name: Run unit tests
+          command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -v -cover -tags=integration ./...
+      - store_test_results:
+          path: junit.xml
+      
   deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
