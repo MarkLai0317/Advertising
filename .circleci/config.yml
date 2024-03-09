@@ -4,6 +4,13 @@ version: 2.1
 jobs:
   test-go:
    
+    parameters:
+      head_branch:
+        type: string
+        default: ""
+      target_branch:
+        type: string
+        default: ""
     # Install go modules and run tests
     docker:
       - image: cimg/go:1.21.6
