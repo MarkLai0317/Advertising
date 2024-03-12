@@ -117,12 +117,17 @@ func (uts *ControllerUnitTestSuite) TestAdvertise() {
 			// check statuscode and error message if any
 			uts.Equal(tc.Expects.StatusCode, resp.Code, "response status code not correct")
 
+			// when return error messeage
 			if tc.Expects.ErrorMessage != "" {
+				// expect error message
 				serviceErr := controller.ServiceError{}
 				err := json.NewDecoder(resp.Body).Decode(&serviceErr)
 				uts.NoError(err)
 				uts.Contains(serviceErr.Message, tc.Expects.ErrorMessage, "error message not correct")
+
+				// when no error and return advertisement list
 			} else {
+				// expect correct ad list
 				respBodyObj := map[string]interface{}{}
 				expectObj := map[string]interface{}{}
 
