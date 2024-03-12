@@ -106,11 +106,11 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 	// Define your query using bson.D to ensure order
 	ctx := context.TODO()
 	filter := bson.D{
+		{"conditions.genders", string(client.Gender)},
+		{"endAt", bson.D{{"$gte", now}}},
 		{"startAt", bson.D{{"$lte", now}}},
 		{"conditions.ageStart", bson.D{{"$lte", client.Age}}},
 		{"conditions.ageEnd", bson.D{{"$gte", client.Age}}},
-		{"conditions.genders", string(client.Gender)},
-		{"endAt", bson.D{{"$gte", now}}},
 		{"conditions.countries", client.Country},
 		{"conditions.platforms", client.Platform},
 	}
