@@ -34,7 +34,7 @@ func main() {
 	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
 
 	// define usecase service and data transferer
-	adService := ad.NewService(mongoRepo)
+	adService := ad.NewService(mongoRepo, mongoRepo)
 	dataTransferer := controller.NewAdDataTransferer()
 
 	AdController := controller.NewAdvertisementController(adService, dataTransferer)

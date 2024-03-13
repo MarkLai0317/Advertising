@@ -20,6 +20,7 @@ type Mongo struct {
 func NewMongo(uri string, connectTimeout time.Duration, maxRetries int) *Mongo {
 	// set mongo connection options and timeout
 	mongoClientOptions := options.Client().ApplyURI(uri)
+	mongoClientOptions.SetMaxPoolSize(0)
 	ctx, cancel := context.WithTimeout(context.Background(), connectTimeout)
 	defer cancel()
 
@@ -106,12 +107,12 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 	// Define your query using bson.D to ensure order
 	ctx := context.TODO()
 	filter := bson.D{
-		{"conditions.genders", string(client.Gender)},
+		{"conditions.countries", client.Country},
 		{"endAt", bson.D{{"$gte", now}}},
 		{"startAt", bson.D{{"$lte", now}}},
 		{"conditions.ageStart", bson.D{{"$lte", client.Age}}},
 		{"conditions.ageEnd", bson.D{{"$gte", client.Age}}},
-		{"conditions.countries", client.Country},
+		{"conditions.genders", string(client.Gender)},
 		{"conditions.platforms", client.Platform},
 	}
 

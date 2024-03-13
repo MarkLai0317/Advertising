@@ -12,13 +12,15 @@ type Repository interface {
 }
 
 type Service struct {
-	Repo Repository
+	CreateRepo Repository
+	GetRepo    Repository
 }
 
 // injection of Repository for Inversion of Control
-func NewService(repository Repository) *Service {
+func NewService(createRepository Repository, getRepository Repository) *Service {
 	return &Service{
-		Repo: repository,
+		CreateRepo: createRepository,
+		GetRepo:    getRepository,
 	}
 }
 
@@ -35,7 +37,7 @@ func (s *Service) CreateAd(advertisement *Advertisement) error {
 	if err := ValidateAdvertisement(advertisement, sliceValidator); err != nil {
 		return fmt.Errorf("invalid Advertisement: %w", err)
 	}
-	if err := s.Repo.CreateAdvertisement(advertisement); err != nil {
+	if err := s.CreateRepo.CreateAdvertisement(advertisement); err != nil {
 		return fmt.Errorf("error creating Advertisement in DB: %w", err)
 	}
 	return nil
@@ -140,7 +142,7 @@ func (s *Service) Advertise(client *Client) ([]Advertisement, error) {
 	// if limit < 1 {
 	// 	return nil, fmt.Errorf("limit cannot less than 1")
 	// }
-	adSlice, err := s.Repo.GetAdvertisements(client, time.Now())
+	adSlice, err := s.GetRepo.GetAdvertisements(client, time.Now())
 
 	if err != nil {
 		return nil, fmt.Errorf("GetAdvertisements Error: %w", err)
