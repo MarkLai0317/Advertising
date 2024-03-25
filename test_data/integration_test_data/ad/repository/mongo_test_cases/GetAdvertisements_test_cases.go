@@ -159,7 +159,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					GenderMissing:   true,
 					CountryMissing:  true,
 					PlatformMissing: true,
-					Offset:          1,
+					Offset:          0,
 					Limit:           50,
 				},
 				Now: time.Date(2025, 2, 1, 0, 0, 0, 0, time.UTC),
