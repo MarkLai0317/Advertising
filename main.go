@@ -22,6 +22,10 @@ func main() {
 
 	// define repo
 	dbUrl := os.Getenv("DB_URL")
+
+	// dbUrlArrayStr := os.Getenv("DB_URL_ARRAY")
+	// dbUrlArray := strings.Split(dbUrlArrayStr, "|")
+
 	dbTimeoutSecond, err := strconv.Atoi(os.Getenv("DB_TIMEOUT_SECOND"))
 	if err != nil {
 		log.Fatalf("DB_TIMEOUT format error: %s", err)
@@ -30,6 +34,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("DB_RETRIES format error: %s", err)
 	}
+
+	// repoList := make([]ad.Repository, len(dbUrlArray))
+
+	// for i, dbUrl := range dbUrlArray {
+	// 	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
+	// 	repoList[i] = mongoRepo
+	// }
+
+	// loadBalancer := repository.NewLoadBalancerOptions(repoList)
 
 	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
 

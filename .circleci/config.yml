@@ -58,15 +58,45 @@ jobs:
       - store_test_results:
           path: .
       
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+  build-and-deploy:
     docker:
-      - image: cimg/base:stable
+      - image: docker:25.0.3  # Docker CLI for building Docker image
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
+      # Step 2: Build Docker image
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Build Docker image
+          command: |
+            docker build -t laimark/advertising:latest .
+            docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+            docker push laimark/advertising:latest
+      
+      # Step 3: Deploy to Kubernetes
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            kubectl apply -f your-kubernetes-deployment.yaml
+  deploy:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - run:
+          name: Install kubectl
+          command: gcloud components install kubectl
+      - run:
+          name: Set Up GCP Credentials
+          command: |
+            echo $GOOGLE_SERVICE_ACCOUNT_KEY > ${HOME}/gcp-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcp-key.json
+      - run:
+          name: Configure kubectl
+          command: |
+            gcloud container clusters get-credentials [CLUSTER_NAME] --zone [ZONE] --project [PROJECT_ID]
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            kubectl apply -f [YOUR_K8S_DEPLOYMENT_FILE.yaml]
 workflows:
   build-and-test:
     jobs:

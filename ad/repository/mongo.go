@@ -102,19 +102,12 @@ func (m *Mongo) CreateAdvertisement(advertisement *ad.Advertisement) error {
 }
 
 func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advertisement, error) {
+
 	collection := m.mongoClient.Database("advertising").Collection("advertisement")
 
 	// Define your query using bson.D to ensure order
 	ctx := context.TODO()
-	filter := bson.D{
-		{"conditions.countries", client.Country},
-		{"endAt", bson.D{{"$gte", now}}},
-		{"startAt", bson.D{{"$lte", now}}},
-		{"conditions.ageStart", bson.D{{"$lte", client.Age}}},
-		{"conditions.ageEnd", bson.D{{"$gte", client.Age}}},
-		{"conditions.genders", string(client.Gender)},
-		{"conditions.platforms", client.Platform},
-	}
+	filter := buildMongoQuery(client, now)
 
 	opts := options.Find().
 		SetSort(bson.D{{"endAt", 1}}).
@@ -145,6 +138,43 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 		}
 	}
 	return resultAdvertisements, nil
+}
+
+// use exist if param missing
+func buildMongoQuery(client *ad.Client, now time.Time) bson.D {
+
+	countryQuery := bson.E{"conditions.countries", string(client.Country)}
+	if client.CountryMissing {
+		countryQuery = bson.E{"conditions.countries", bson.D{{"$exists", true}}}
+	}
+
+	startAtQuery := bson.E{"startAt", bson.D{{"$lte", now}}}
+
+	ageStartQuery := bson.E{"conditions.ageStart", bson.D{{"$lte", client.Age}}}
+	ageEndQuery := bson.E{"conditions.ageEnd", bson.D{{"$gte", client.Age}}}
+	if client.AgeMissing {
+		ageStartQuery = bson.E{"conditions.ageStart", bson.D{{"$exists", true}}}
+		ageEndQuery = bson.E{"conditions.ageEnd", bson.D{{"$exists", true}}}
+	}
+
+	genderQuery := bson.E{"conditions.genders", string(client.Gender)}
+	if client.GenderMissing {
+		genderQuery = bson.E{"conditions.genders", bson.D{{"$exists", true}}}
+	}
+
+	platformQuery := bson.E{"conditions.platforms", string(client.Platform)}
+	if client.PlatformMissing {
+		platformQuery = bson.E{"conditions.platforms", bson.D{{"$exists", true}}}
+	}
+
+	return bson.D{
+		countryQuery,
+		startAtQuery,
+		ageStartQuery,
+		ageEndQuery,
+		genderQuery,
+		platformQuery,
+	}
 }
 
 // func constructClientQuery(client *ad.Client){
