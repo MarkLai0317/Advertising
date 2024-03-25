@@ -226,7 +226,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 6: sixth ddoc",
+					Title:   "integration test 6: sixth doc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
