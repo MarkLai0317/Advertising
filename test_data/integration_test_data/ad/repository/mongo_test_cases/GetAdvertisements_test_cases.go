@@ -190,7 +190,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 3: startAt not match",
+					Title:   "integration test 3: third doc",
 					StartAt: time.Date(2027, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2028, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -202,7 +202,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 4: age not match",
+					Title:   "integration test 4: forth doc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -214,7 +214,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 5: genders not match",
+					Title:   "integration test 5: fifth doc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -226,7 +226,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 6: contries not match",
+					Title:   "integration test 6: sixth ddoc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -238,7 +238,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 7: platform not match",
+					Title:   "integration test 7: seventh doc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -250,7 +250,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 8: third doc",
+					Title:   "integration test 8: eighth doc",
 					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
@@ -289,7 +289,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 						EndAt: time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC),
 					},
 					{
-						Title: "integration test 8: third doc",
+						Title: "integration test 8: eighth doc",
 						EndAt: time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC),
 					},
 				},
