@@ -54,7 +54,7 @@ jobs:
       
       - run: 
           name: create .env
-          command: echo $'DB_URL=mongodb://mark:markpwd@localhost:27017\nDB_TIMEOUT_SECOND=5\nDB_RETRIES=1\nPORT=8080' > .env
+          command: echo $'DB_URL=mongodb://mark:markpwd@localhost:27017\nDB_TIMEOUT_SECOND=5\nDB_RETRIES=1\nPORT=80' > .env
       
       - run: 
           name: run main
@@ -62,7 +62,7 @@ jobs:
           background: true
       - run:
           name: Wait for Go server
-          command: dockerize -wait http://127.0.0.1:8080/health -timeout 20s
+          command: dockerize -wait http://127.0.0.1:80/health -timeout 20s
       - run:
           name: Display Go server logs
           command: cat server.log
