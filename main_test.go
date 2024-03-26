@@ -15,6 +15,7 @@ import (
 
 	"github.com/MarkLai0317/Advertising/ad/repository"
 	"github.com/MarkLai0317/Advertising/test_data/integration_test_data/main_test_cases"
+	"github.com/agiledragon/gomonkey/v2"
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -124,6 +125,13 @@ type AdRequest struct {
 // test create advertisement api
 func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 
+	// stub time.Now
+	patches := gomonkey.NewPatches()
+	defer patches.Reset()
+	patches.ApplyFunc(time.Now, func() time.Time {
+		fakeTime := time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)
+		return fakeTime
+	})
 	//create input body for post request
 	inputAdvertisements := AdRequest{
 		Title:   "AD 1",
@@ -142,15 +150,13 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 		panic(err)
 	}
 
-	// Create a new request using http
+	// Create a new request using http to test server
 	req, err := http.NewRequest("POST", "http://localhost:80/api/v1/ad", bytes.NewBuffer(jsonData))
 	if err != nil {
 		panic(err)
 	}
-
 	// Set the content type to application/json
 	req.Header.Set("Content-Type", "application/json")
-
 	// Send the request using a client
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -161,22 +167,9 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 	// statusCode should be 200
 	its.Equal(http.StatusOK, resp.StatusCode)
 
+	results := fetchDbData(its)
+
 	// connect to DB to see if insert success
-	ctx := context.TODO()
-	collection := its.testMongoClient.Database("advertising").Collection("advertisement")
-	filter := bson.D{{}}
-	opts := options.Find()
-	// run query on database
-	cursor, err := collection.Find(ctx, filter, opts)
-	its.Equal(nil, err, "error finding documents, check mongo_test")
-	defer cursor.Close(ctx)
-	// Iterate through the cursor
-	var results []repository.AdvertisementMongo
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		log.Printf("error processing cursor: %s", err.Error())
-	}
-	its.Equal(nil, err, "error processing cursor, check mongo_test")
 
 	// if the documents insert are successfully inserted by checking the value of each field
 	its.Equal(inputAdvertisements.Title, results[0].Title)
@@ -188,6 +181,27 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 	its.Equal(inputAdvertisements.Conditions.Countries, convertEnumSliceToStringSlice(results[0].Conditions.Countries))
 	its.Equal(inputAdvertisements.Conditions.Platforms, convertEnumSliceToStringSlice(results[0].Conditions.Platforms))
 
+}
+
+// utility function to fetch data from database after calling api
+func fetchDbData(its *MainIntegrationTestSuite) []repository.AdvertisementMongo {
+	ctx := context.TODO()
+	collection := its.testMongoClient.Database("advertising").Collection("advertisement")
+	filter := bson.D{{}}
+	opts := options.Find()
+	// run query on database
+	cursor, err := collection.Find(ctx, filter, opts)
+	if err != nil {
+		log.Fatalf("error processing cursor: %s", err.Error())
+	}
+	defer cursor.Close(ctx)
+	// Iterate through the cursor
+	var results []repository.AdvertisementMongo
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		log.Fatalf("error processing cursor: %s", err.Error())
+	}
+	return results
 }
 
 func convertEnumSliceToStringSlice[T ~string](enumSlice []T) []string {

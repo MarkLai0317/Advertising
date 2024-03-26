@@ -136,13 +136,13 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				ReturnData: `{
 					"items":[
 						{
-							Title: "integration test 2: second doc",
-							EndAt: "2026-05-01T00:00:00.000Z"
+							"Title": "integration test 2: second doc",
+							"EndAt": "2026-05-01T00:00:00.000Z"
 							
 						},
 						{
-							Title: "integration test 8: third doc",
-							EndAt: "2026-12-01T00:00:00.000Z"
+							"Title": "integration test 8: third doc",
+							"EndAt": "2026-12-01T00:00:00.000Z"
 						}
 					]
 				}`,
