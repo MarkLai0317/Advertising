@@ -62,7 +62,11 @@ jobs:
       - run:
           name: Wait for Go server
           command: dockerize -wait http://127.0.0.1:8080/health -timeout 30s
-      
+      - run:
+          name: Display Go server logs
+          command: cat server.log
+          when: on_fail
+            
       - run:
           name: Run integration tests
           command: gotestsum --format testname --junitfile junit.xml -- -gcflags=all=-l -p 1 -v -cover -tags=integration ./...
