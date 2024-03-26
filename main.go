@@ -57,7 +57,7 @@ func main() {
 
 	adRouter.Post("/api/v1/ad", adController.CreateAdvertisement)
 	adRouter.Get("/api/v1/ad", adController.Advertise)
-	adRouter.Get("health", func(w http.ResponseWriter, r *http.Request) {
+	adRouter.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		log.Println("health check")
 	})
