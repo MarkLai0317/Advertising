@@ -19,7 +19,6 @@ jobs:
     docker:
       - image: cimg/go:1.21.6
       - image: laimark/advertising:test-db
-        name: test-db
     steps:
       - checkout
       - restore_cache:
