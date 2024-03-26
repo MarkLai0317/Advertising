@@ -61,7 +61,7 @@ jobs:
           command: go run main.go > server.log 2>&1 &
       - run:
           name: Wait for Go server
-          command: dockerize -wait tcp://localhost:80 -timeout 1m
+          command: dockerize -wait http://localhost:80/health -timeout 30s
       
       - run:
           name: Run integration tests

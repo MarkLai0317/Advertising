@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -50,14 +51,18 @@ func main() {
 	adService := ad.NewService(mongoRepo, mongoRepo)
 	dataTransferer := controller.NewAdDataTransferer()
 
-	AdController := controller.NewAdvertisementController(adService, dataTransferer)
+	adController := controller.NewAdvertisementController(adService, dataTransferer)
 
-	customRouter := router.NewChiAdapter()
+	adRouter := router.NewChiAdapter()
 
-	customRouter.Post("/api/v1/ad", AdController.CreateAdvertisement)
-	customRouter.Get("/api/v1/ad", AdController.Advertise)
+	adRouter.Post("/api/v1/ad", adController.CreateAdvertisement)
+	adRouter.Get("/api/v1/ad", adController.Advertise)
+	adRouter.Get("health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		log.Println("health check")
+	})
 
-	err = customRouter.ListenAndServe(os.Getenv("PORT"))
+	err = adRouter.ListenAndServe(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatalf("ListenAndServe error: %s", err)
 	}
