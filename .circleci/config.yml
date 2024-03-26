@@ -58,10 +58,11 @@ jobs:
       
       - run: 
           name: run main
-          command: go run main.go > server.log 2>&1 &
+          command: go run main.go
+          background: true
       - run:
           name: Wait for Go server
-          command: dockerize -wait http://127.0.0.1:8080/health -timeout 30s
+          command: dockerize -wait http://127.0.0.1:8080/health -timeout 20s
       - run:
           name: Display Go server logs
           command: cat server.log
