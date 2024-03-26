@@ -156,6 +156,9 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 	// Send the request using a client
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("error %s: check test cases", err.Error())
+	}
 
 	// statusCode should be 200
 	its.Equal(http.StatusOK, resp.StatusCode)
@@ -198,6 +201,7 @@ func (its *MainIntegrationTestSuite) TestGetAdvertisement() {
 		its.Run(name, func() {
 
 			its.SetupTest()
+
 			// prepare testData in DB
 			collection := its.testMongoClient.Database("advertising").Collection("advertisement")
 			_, err := collection.InsertMany(context.TODO(), tc.TestData)

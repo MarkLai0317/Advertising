@@ -58,7 +58,10 @@ jobs:
       
       - run: 
           name: run main
-          command: go run main.go & sleep 5
+          command: go run main.go
+      - run:
+          name: Wait for Go server
+          command: dockerize -wait tcp://localhost:80 -timeout 1m
       
       - run:
           name: Run integration tests
