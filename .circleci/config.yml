@@ -58,7 +58,7 @@ jobs:
       
       - run: 
           name: run main
-          command: go run main.go
+          command: go run main.go > server.log 2>&1 &
       - run:
           name: Wait for Go server
           command: dockerize -wait tcp://localhost:80 -timeout 1m
