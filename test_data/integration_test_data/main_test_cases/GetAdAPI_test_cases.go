@@ -134,14 +134,17 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 			},
 			Expects: GetAdvertisementsExpects{
 				ReturnData: `{
-					{
-						Title: "integration test 2: second doc",
-						EndAt: time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC),
-					},
-					{
-						Title: "integration test 8: third doc",
-						EndAt: time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC),
-					},
+					"items":[
+						{
+							Title: "integration test 2: second doc",
+							EndAt: "2026-05-01T00:00:00.000Z"
+							
+						},
+						{
+							Title: "integration test 8: third doc",
+							EndAt: "2026-12-01T00:00:00.000Z"
+						}
+					]
 				}`,
 			},
 		},

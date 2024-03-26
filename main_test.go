@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -126,7 +125,6 @@ type AdRequest struct {
 func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 
 	//create input body for post request
-
 	inputAdvertisements := AdRequest{
 		Title:   "AD 1",
 		StartAt: "2023-12-10T03:00:00.000Z",
@@ -181,15 +179,23 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 	its.Equal(nil, err, "error processing cursor, check mongo_test")
 
 	// if the documents insert are successfully inserted by checking the value of each field
-	its.Equal(inputAdvertisements.Title, results[0].Title, fmt.Sprintf("Title should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.StartAt, results[0].StartAt, fmt.Sprintf("StartAt should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.EndAt, results[0].EndAt, fmt.Sprintf("EndAt should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.Conditions.AgeStart, results[0].Conditions.AgeStart, fmt.Sprintf("Condition.AgeStart should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.Conditions.AgeEnd, results[0].Conditions.AgeEnd, fmt.Sprintf("Condition.AgeEnd should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.Conditions.Genders, results[0].Conditions.Genders, fmt.Sprintf("Condition.Genders should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.Conditions.Countries, results[0].Conditions.Countries, fmt.Sprintf("Condition.Countries should be the same in inputAdvertisements"))
-	its.Equal(inputAdvertisements.Conditions.Platforms, results[0].Conditions.Platforms, fmt.Sprintf("Condition.Platforms should be the same in inputAdvertisements"))
+	its.Equal(inputAdvertisements.Title, results[0].Title)
+	its.Equal(inputAdvertisements.StartAt, results[0].StartAt.Format("2006-01-02T15:04:05.000Z"))
+	its.Equal(inputAdvertisements.EndAt, results[0].EndAt.Format("2006-01-02T15:04:05.000Z"))
+	its.Equal(inputAdvertisements.Conditions.AgeStart, results[0].Conditions.AgeStart)
+	its.Equal(inputAdvertisements.Conditions.AgeEnd, results[0].Conditions.AgeEnd)
+	its.Equal(inputAdvertisements.Conditions.Genders, convertEnumSliceToStringSlice(results[0].Conditions.Genders))
+	its.Equal(inputAdvertisements.Conditions.Countries, convertEnumSliceToStringSlice(results[0].Conditions.Countries))
+	its.Equal(inputAdvertisements.Conditions.Platforms, convertEnumSliceToStringSlice(results[0].Conditions.Platforms))
 
+}
+
+func convertEnumSliceToStringSlice[T ~string](enumSlice []T) []string {
+	stringSlice := make([]string, len(enumSlice))
+	for i, enumValue := range enumSlice {
+		stringSlice[i] = string(enumValue)
+	}
+	return stringSlice
 }
 
 // test get advertisement api
