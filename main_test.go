@@ -248,6 +248,8 @@ func (its *MainIntegrationTestSuite) TestGetAdvertisement() {
 			err = json.Unmarshal([]byte(tc.Expects.ReturnData), &objExpect)
 			its.Equal(nil, err)
 
+			its.Equal(objExpect, objBody)
+
 			its.TearDownTest()
 
 		})

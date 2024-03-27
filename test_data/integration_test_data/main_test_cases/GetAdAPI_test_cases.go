@@ -25,8 +25,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 			TestData: []interface{}{
 				repository.AdvertisementMongo{
 					Title:   "integration test 1:  first doc",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -37,8 +37,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 1:  first doc",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -49,8 +49,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 2: second doc",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 5, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  15,
 						AgeEnd:    30,
@@ -61,8 +61,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 3: startAt not match",
-					StartAt: time.Date(2027, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2028, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5001, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -73,8 +73,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 4: age not match",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  50,
 						AgeEnd:    100,
@@ -85,8 +85,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 5: genders not match",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -97,8 +97,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 6: contries not match",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -109,8 +109,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 7: platform not match",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  1,
 						AgeEnd:    50,
@@ -121,8 +121,8 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				},
 				repository.AdvertisementMongo{
 					Title:   "integration test 8: third doc",
-					StartAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC),
+					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+					EndAt:   time.Date(5000, 12, 1, 0, 0, 0, 0, time.UTC),
 					Conditions: repository.ConditionsMongo{
 						AgeStart:  5,
 						AgeEnd:    30,
@@ -137,12 +137,12 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					"items":[
 						{
 							"Title": "integration test 2: second doc",
-							"EndAt": "2026-05-01T00:00:00.000Z"
+							"EndAt": "5000-05-01T00:00:00.000Z"
 							
 						},
 						{
 							"Title": "integration test 8: third doc",
-							"EndAt": "2026-12-01T00:00:00.000Z"
+							"EndAt": "5000-12-01T00:00:00.000Z"
 						}
 					]
 				}`,
