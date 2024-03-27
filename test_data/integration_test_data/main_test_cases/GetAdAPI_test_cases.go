@@ -21,7 +21,7 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 
 	testCases := map[string]GetAdvertisementsTestCase{
 		"query the 8, 2 document": {
-			InputUrl: "http://localhost:80/api/v1/ad?offset=0&limit=5&age=24&gender=M&platform=ios&country=TW",
+			InputUrl: "http://localhost:80/api/v1/ad?offset=1&limit=2&age=20&gender=M&platform=ios&country=TW",
 			TestData: []interface{}{
 				repository.AdvertisementMongo{
 					Title:   "integration test 1:  first doc",
@@ -136,13 +136,13 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 				ReturnData: `{
 					"items":[
 						{
-							"Title": "integration test 2: second doc",
-							"EndAt": "5000-05-01T00:00:00.000Z"
+							"title": "integration test 2: second doc",
+							"endAt": "5000-05-01T00:00:00.000Z"
 							
 						},
 						{
-							"Title": "integration test 8: third doc",
-							"EndAt": "5000-12-01T00:00:00.000Z"
+							"title": "integration test 8: third doc",
+							"endAt": "5000-12-01T00:00:00.000Z"
 						}
 					]
 				}`,
