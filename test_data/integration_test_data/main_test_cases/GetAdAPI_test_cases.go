@@ -36,18 +36,6 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 					},
 				},
 				repository.AdvertisementMongo{
-					Title:   "integration test 1:  first doc",
-					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
-					EndAt:   time.Date(5000, 1, 1, 0, 0, 0, 0, time.UTC),
-					Conditions: repository.ConditionsMongo{
-						AgeStart:  1,
-						AgeEnd:    50,
-						Genders:   []ad.GenderType{ad.GenderType("M")},
-						Countries: []ad.CountryCode{ad.CountryCode("TW"), ad.CountryCode("JP")},
-						Platforms: []ad.PlatformType{ad.PlatformType("ios"), ad.PlatformType("android")},
-					},
-				},
-				repository.AdvertisementMongo{
 					Title:   "integration test 2: second doc",
 					StartAt: time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
 					EndAt:   time.Date(5000, 5, 1, 0, 0, 0, 0, time.UTC),
