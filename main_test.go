@@ -135,8 +135,8 @@ func (its *MainIntegrationTestSuite) TestCreateAdvertisement() {
 	//create input body for post request
 	inputAdvertisements := AdRequest{
 		Title:   "AD 1",
-		StartAt: "2023-12-10T03:00:00.000Z",
-		EndAt:   "2025-12-31T16:00:00.000Z",
+		StartAt: "3000-12-10T03:00:00.000Z",
+		EndAt:   "3001-12-31T16:00:00.000Z",
 	}
 	inputAdvertisements.Conditions.AgeStart = 1
 	inputAdvertisements.Conditions.AgeEnd = 100
