@@ -130,14 +130,14 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 	}
 
 	// convert AdvertisementMongo to domain object slice []Advertisement
-	resultAdvertisements := make([]ad.Advertisement, len(results))
+	adSlice := make([]ad.Advertisement, len(results))
 	for i, result := range results {
-		resultAdvertisements[i] = ad.Advertisement{
+		adSlice[i] = ad.Advertisement{
 			Title: result.Title,
 			EndAt: result.EndAt,
 		}
 	}
-	return resultAdvertisements, nil
+	return adSlice, nil
 }
 
 // use exist if param missing
