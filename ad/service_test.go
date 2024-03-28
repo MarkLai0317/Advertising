@@ -28,15 +28,6 @@ func TestUnitTestSuite(t *testing.T) {
 	suite.Run(t, &UnitTestSuite{})
 }
 
-func (uts *UnitTestSuite) TestNewService() {
-	mockCreateRepo := advertisementMock.NewRepository(uts.T())
-	mockGetRepo := advertisementMock.NewRepository(uts.T())
-
-	service := ad.NewService(mockCreateRepo, mockGetRepo)
-	uts.Equal(*service, ad.Service{CreateRepo: mockCreateRepo, GetRepo: mockGetRepo})
-
-}
-
 func (uts *UnitTestSuite) TestCreateAd() {
 
 	mockRepo := advertisementMock.NewRepository(uts.T())
@@ -70,7 +61,7 @@ func (uts *UnitTestSuite) TestCreateAd() {
 
 			}
 
-			service := &ad.Service{CreateRepo: mockRepo, GetRepo: mockRepo}
+			service := ad.NewService(mockRepo)
 			err := service.CreateAd(&tc.Ad)
 
 			uts.Equal(tc.Expects.ExpectError, err)
@@ -223,7 +214,7 @@ func (uts *UnitTestSuite) TestAdvertise() {
 		uts.Run(name, func() {
 
 			mockRepo := advertisementMock.NewRepository(uts.T())
-			service := &ad.Service{CreateRepo: mockRepo, GetRepo: mockRepo}
+			service := ad.NewService(mockRepo)
 
 			// mock Repo
 			if name == "getAdvertisement error" {
