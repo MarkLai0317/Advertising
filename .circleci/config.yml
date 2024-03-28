@@ -19,6 +19,7 @@ jobs:
     docker:
       - image: cimg/go:1.21.6
       - image: laimark/advertising:test-db
+      - image: redis:alpine
     steps:
       - checkout
       - restore_cache:
@@ -50,11 +51,15 @@ jobs:
 
       - run:
           name: Wait for DB
-          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+          command: dockerize -wait tcp://localhost:27017 -timeout 20s
+      
+      - run:
+          name: Wait for redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 20s
       
       - run: 
           name: create .env
-          command: echo $'DB_URL=mongodb://mark:markpwd@localhost:27017\nDB_TIMEOUT_SECOND=5\nDB_RETRIES=1\nPORT=80' > .env
+          command: echo $'DB_URL=mongodb://mark:markpwd@localhost:27017\nREDIS_HOST=localhost:6379\nDB_TIMEOUT_SECOND=5\nDB_RETRIES=1\nPORT=80' > .env
       
       - run: 
           name: run main
