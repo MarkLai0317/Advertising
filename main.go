@@ -21,12 +21,8 @@ func main() {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
-	// define repo
+	// get env for mongoRepo
 	dbUrl := os.Getenv("DB_URL")
-
-	// dbUrlArrayStr := os.Getenv("DB_URL_ARRAY")
-	// dbUrlArray := strings.Split(dbUrlArrayStr, "|")
-
 	dbTimeoutSecond, err := strconv.Atoi(os.Getenv("DB_TIMEOUT_SECOND"))
 	if err != nil {
 		log.Fatalf("DB_TIMEOUT format error: %s", err)
@@ -35,26 +31,22 @@ func main() {
 	if err != nil {
 		log.Fatalf("DB_RETRIES format error: %s", err)
 	}
-
-	// repoList := make([]ad.Repository, len(dbUrlArray))
-
-	// for i, dbUrl := range dbUrlArray {
-	// 	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
-	// 	repoList[i] = mongoRepo
-	// }
-
-	// loadBalancer := repository.NewLoadBalancerOptions(repoList)
-
+	// define repository
 	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
-
+	redisHost := os.Getenv("REDIS_HOST")
+	cacheRepo := repository.NewCacheRepo(redisHost, mongoRepo)
 	// define usecase service and data transferer
-	adService := ad.NewService(mongoRepo, mongoRepo)
+	adService := ad.NewService(cacheRepo)
 	dataTransferer := controller.NewAdDataTransferer()
-
+	// inject to controller
 	adController := controller.NewAdvertisementController(adService, dataTransferer)
-
+	// define router
 	adRouter := router.NewChiAdapter()
+	defineAPI(adRouter, adController)
 
+}
+
+func defineAPI(adRouter router.WebFramework, adController *controller.Controller) {
 	adRouter.Post("/api/v1/ad", adController.CreateAdvertisement)
 	adRouter.Get("/api/v1/ad", adController.Advertise)
 	adRouter.Get("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -62,9 +54,8 @@ func main() {
 		log.Println("health check")
 	})
 
-	err = adRouter.ListenAndServe(os.Getenv("PORT"))
+	err := adRouter.ListenAndServe(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatalf("ListenAndServe error: %s", err)
 	}
-
 }
