@@ -33,7 +33,7 @@ func (uts *ChiRouterUnitTestSuite) TestGet() {
 	chiRouter.Get("/hello", helloWorldHandler)
 
 	// Create a test server using the httptest package
-	testServer := httptest.NewServer(chiRouter.Router)
+	testServer := httptest.NewServer(chiRouter.GetHandler())
 	defer testServer.Close()
 
 	// Make a GET request to the "/hello" endpoint
@@ -75,7 +75,7 @@ func (uts *ChiRouterUnitTestSuite) TestPost() {
 	chiRouter.Post("/hello", helloWorldHandler)
 
 	// Create a test server using the httptest package
-	testServer := httptest.NewServer(chiRouter.Router)
+	testServer := httptest.NewServer(chiRouter.GetHandler())
 	defer testServer.Close()
 
 	// Make a POST request to the "/hello" endpoint
@@ -123,14 +123,14 @@ func (its *ChiRouterIntegrationTestSuite) TestUseMultilayerURL() {
 	}
 
 	// init router
-	router := router.NewChiAdapter()
+	chiRouter := router.NewChiAdapter()
 	// Applying middleware to a specific path prefix
 
-	router.Use("/protected1", testMiddleware1)
-	router.Use("/protected1", testMiddleware2)
-	router.Use("/protected-prefix/protected2", testMiddleware1)
-	router.Use("/protected-layer1", testMiddleware1)
-	router.Use("/protected-layer1/protected-layer2", testMiddleware2)
+	chiRouter.Use("/protected1", testMiddleware1)
+	chiRouter.Use("/protected1", testMiddleware2)
+	chiRouter.Use("/protected-prefix/protected2", testMiddleware1)
+	chiRouter.Use("/protected-layer1", testMiddleware1)
+	chiRouter.Use("/protected-layer1/protected-layer2", testMiddleware2)
 
 	// Define a handler to use with and without the middleware
 	helloWorldHandler := func(w http.ResponseWriter, r *http.Request) {
@@ -138,13 +138,13 @@ func (its *ChiRouterIntegrationTestSuite) TestUseMultilayerURL() {
 		fmt.Fprintf(w, "Handler response")
 	}
 
-	router.Get("/", helloWorldHandler)
-	router.Get("/unprotected/resource", helloWorldHandler)
-	router.Get("/protected1/resource", helloWorldHandler)
-	router.Get("/protected-prefix/protected2", helloWorldHandler)
-	router.Get("/protected-layer1/protected-layer2/resource", helloWorldHandler)
+	chiRouter.Get("/", helloWorldHandler)
+	chiRouter.Get("/unprotected/resource", helloWorldHandler)
+	chiRouter.Get("/protected1/resource", helloWorldHandler)
+	chiRouter.Get("/protected-prefix/protected2", helloWorldHandler)
+	chiRouter.Get("/protected-layer1/protected-layer2/resource", helloWorldHandler)
 
-	testServer := httptest.NewServer(router.Router)
+	testServer := httptest.NewServer(chiRouter.GetHandler())
 	defer testServer.Close()
 
 	//Test the unprotected route that should not have middleware applied

@@ -17,8 +17,12 @@ type ChiRouter struct {
 	Router *chi.Mux
 }
 
-func NewChiAdapter() *ChiRouter {
+func NewChiAdapter() WebFramework {
 	return &ChiRouter{Router: chi.NewRouter()}
+}
+
+func (chiRouter *ChiRouter) GetHandler() http.Handler {
+	return chiRouter.Router
 }
 
 func (chiRouter *ChiRouter) Get(path string, handlerFunc http.HandlerFunc) {
