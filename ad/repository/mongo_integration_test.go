@@ -195,7 +195,7 @@ func (its *MongoIntegrationTestSuite) TestGetAdvertisements() {
 
 			its.SetupTest()
 			// prepare testData in DB
-			collection := its.testMongoClient.Database("advertising").Collection("advertisement")
+			collection := its.testMongoClient.Database("advertising").Collection(readCollection)
 			_, err := collection.InsertMany(context.TODO(), tc.TestData)
 			if err != nil {
 				log.Printf("insert document error %s", err.Error())
