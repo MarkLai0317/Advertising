@@ -32,6 +32,7 @@ func TestMongoIntegrationTestSuite(t *testing.T) {
 const mongoUri = "mongodb://mark:markpwd@localhost:27017"
 const writeCollection = "all_advertisement"
 const readCollection = "active_advertisement"
+const dbName = "advertising"
 
 func (its *MongoIntegrationTestSuite) SetupSuite() {
 	mongoClientOptions := options.Client().ApplyURI(mongoUri)
@@ -85,13 +86,13 @@ func (its *MongoIntegrationTestSuite) TearDownSuite() {
 func (its *MongoIntegrationTestSuite) SetupTest() {
 
 	ctx := context.TODO()
-	collection := its.testMongoClient.Database("advertising").Collection(writeCollection)
+	collection := its.testMongoClient.Database(dbName).Collection(writeCollection)
 
 	filter := bson.M{}
 
 	_, err := collection.DeleteMany(ctx, filter)
 
-	collection = its.testMongoClient.Database("advertising").Collection(readCollection)
+	collection = its.testMongoClient.Database(dbName).Collection(readCollection)
 
 	filter = bson.M{}
 
@@ -104,7 +105,7 @@ func (its *MongoIntegrationTestSuite) SetupTest() {
 func (its *MongoIntegrationTestSuite) TearDownTest() {
 
 	ctx := context.TODO()
-	collection := its.testMongoClient.Database("advertising").Collection(writeCollection)
+	collection := its.testMongoClient.Database(dbName).Collection(writeCollection)
 
 	filter := bson.M{}
 
@@ -112,7 +113,7 @@ func (its *MongoIntegrationTestSuite) TearDownTest() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	collection = its.testMongoClient.Database("advertising").Collection(readCollection)
+	collection = its.testMongoClient.Database(dbName).Collection(readCollection)
 	filter = bson.M{}
 	_, err = collection.DeleteMany(ctx, filter)
 	if err != nil {
@@ -124,7 +125,7 @@ func (its *MongoIntegrationTestSuite) TestCreateAdvertisement() {
 
 	//  init mongoRepo object
 
-	mongoRepo := repository.NewMongo(mongoUri, writeCollection, readCollection, 10*time.Second, 3)
+	mongoRepo := repository.NewMongo(mongoUri, dbName, writeCollection, readCollection, 10*time.Second, 3)
 	inputAdvertisements := []ad.Advertisement{
 		{
 			Title:   "integration test",
@@ -151,7 +152,7 @@ func (its *MongoIntegrationTestSuite) TestCreateAdvertisement() {
 
 	// check if insert successfully by query the database to see the documents are the same as previous created
 	ctx := context.TODO()
-	collection := its.testMongoClient.Database("advertising").Collection(writeCollection)
+	collection := its.testMongoClient.Database(dbName).Collection(writeCollection)
 	filter := bson.D{{}}
 	opts := options.Find()
 
@@ -195,7 +196,7 @@ func (its *MongoIntegrationTestSuite) TestGetAdvertisements() {
 
 			its.SetupTest()
 			// prepare testData in DB
-			collection := its.testMongoClient.Database("advertising").Collection(readCollection)
+			collection := its.testMongoClient.Database(dbName).Collection(readCollection)
 			_, err := collection.InsertMany(context.TODO(), tc.TestData)
 			if err != nil {
 				log.Printf("insert document error %s", err.Error())
@@ -203,7 +204,7 @@ func (its *MongoIntegrationTestSuite) TestGetAdvertisements() {
 			its.Equal(nil, err, "prepare data error. pleas check test: TestGetAadvertisements ")
 
 			// run tested function
-			mongoRepo := repository.NewMongo(mongoUri, writeCollection, readCollection, 10*time.Second, 3)
+			mongoRepo := repository.NewMongo(mongoUri, dbName, writeCollection, readCollection, 10*time.Second, 3)
 			advertisementSlice, err := mongoRepo.GetAdvertisements(&tc.Input.Client, tc.Input.Now)
 
 			its.Equal(tc.Expects.ExpectError, err, "GetAdvertisements error not the same")

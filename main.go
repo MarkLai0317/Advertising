@@ -34,7 +34,8 @@ func main() {
 	// define repository
 	writeCollection := os.Getenv("WRITE_COLLECTION")
 	readCollection := os.Getenv("READ_COLLECTION")
-	mongoRepo := repository.NewMongo(dbUrl, writeCollection, readCollection, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
+	dbName := os.Getenv("DB_NAME")
+	mongoRepo := repository.NewMongo(dbUrl, dbName, writeCollection, readCollection, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
 	redisHost := os.Getenv("REDIS_HOST")
 	cacheRepo := repository.NewCacheRepo(redisHost, mongoRepo)
 	// define usecase service and data transferer
