@@ -57,7 +57,7 @@ func NewMongo(uri string, dbName string, writeCollection string, readCollection 
 		log.Fatalf("Max retries reached, unable to establish connection to MongoDB: %s\n", err)
 	}
 
-	return &Mongo{mongoClient: mongoClient, readCollection: readCollection, writeCollection: writeCollection}
+	return &Mongo{mongoClient: mongoClient, dbName: dbName, writeCollection: writeCollection, readCollection: readCollection}
 
 }
 
