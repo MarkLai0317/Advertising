@@ -14,10 +14,12 @@ import (
 )
 
 type Mongo struct {
-	mongoClient *mongo.Client
+	mongoClient     *mongo.Client
+	readCollection  string
+	writeCollection string
 }
 
-func NewMongo(uri string, connectTimeout time.Duration, maxRetries int) *Mongo {
+func NewMongo(uri string, writeCollection string, readCollection string, connectTimeout time.Duration, maxRetries int) *Mongo {
 	// set mongo connection options and timeout
 	mongoClientOptions := options.Client().ApplyURI(uri)
 	mongoClientOptions.SetMaxPoolSize(0)
@@ -54,7 +56,7 @@ func NewMongo(uri string, connectTimeout time.Duration, maxRetries int) *Mongo {
 		log.Fatalf("Max retries reached, unable to establish connection to MongoDB: %s\n", err)
 	}
 
-	return &Mongo{mongoClient: mongoClient}
+	return &Mongo{mongoClient: mongoClient, readCollection: readCollection, writeCollection: writeCollection}
 
 }
 
@@ -90,7 +92,7 @@ func (m *Mongo) CreateAdvertisement(advertisement *ad.Advertisement) error {
 		},
 	}
 
-	collection := m.mongoClient.Database("advertising").Collection("advertisement")
+	collection := m.mongoClient.Database("advertising").Collection(m.writeCollection)
 	result, err := collection.InsertOne(context.TODO(), advertisementMongo)
 	if err != nil {
 		return fmt.Errorf("error inserting advertisement: %w", err)
@@ -103,7 +105,7 @@ func (m *Mongo) CreateAdvertisement(advertisement *ad.Advertisement) error {
 
 func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advertisement, error) {
 
-	collection := m.mongoClient.Database("advertising").Collection("advertisement")
+	collection := m.mongoClient.Database("advertising").Collection(m.readCollection)
 
 	// Define your query using bson.D to ensure order
 	ctx := context.TODO()

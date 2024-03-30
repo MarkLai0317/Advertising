@@ -8,27 +8,36 @@
 ## System Design
 
 ![system design](_assets/System_Design.png)
+# Project Structure Overview
 
-- 此專案中除了main package 以外有四個主要package:
-    - package ad （業務邏輯核心）
-        - 定義domain object
-            - Advertisement : 包含title, startAt, endAt, 與多個Conditions
-            - Client : 包含各個condition的查詢, offset, limit, 與各個condition 是否為missing(也就是url中有無提供該查詢參數, 沒有就為false)
-            - gender, country, platform 的 enum type
-        - 定義此app的核心 UseCase interface：包含建立與投放廣告(Post, Get)
-        - 定義 Repository interface：
-            - CreateAdvertisement(Advertisement)
-            - GetAdvertisementSlice(Client)
-        - 以 Service struct實作 UseCase 業務邏輯：
-            1. 驗證 api call 的參數是否符合規定（ex: gender 不能是 "J", age 要在 1~100 ...）
-            2. 根據 repository interface 呼叫被注入進來的 repo method，以創建或投放廣告。 (建立與投放廣告使用的repo可以不一樣，增加更多彈性)
-            3. 回傳執行結果
+This project consists of the main package and four other key packages:
 
-    - package controller (負責與外界 client (who call api)溝通 )
-        - 把 核心業務邏輯(ad) 與 外部使用的通訊協定(http)、資料格式(json) 做隔離
-        - 定義DataTransferer interface 
-            - 處理從外部資料格式轉換成domain object (ad.Advertisement, ad.Client)
-            - 處理從domain object ([]ad.Advertisement)轉換成 json 需求格式
+## `package ad` (Core Business Logic)
+
+- **Domain Objects**:
+  - `Advertisement`: Contains `title`, `startAt`, `endAt`, and multiple `Conditions`.
+  - `Client`: Contains queries for various `conditions`, `offset`, `limit`, and a flag indicating whether each condition is missing (i.e., if the query parameter was not provided by client, it's `false`).
+  - Enum types for `gender`, `country`, `platform`.
+
+- **Interfaces**:
+  - Core **UseCase interface** for the app includes creating and getting (advertising) ads (`Post`, `Get`).
+  - **Repository interface**:
+    - `CreateAdvertisement(Advertisement)`
+    - `GetAdvertisementSlice(Client)`
+
+- **Service Struct Implementation**:
+  Implements business logic for UseCases:
+  1. Validates API call parameters for compliance (e.g., `gender` cannot be "J", `age` must be between 1 to 100, etc.).
+  2. Calls the injected repository method to create or get advertisements.
+  3. Returns execution results.
+
+## `package controller` (Handles Communication with External Clients)
+
+- Isolates core business logic (`ad`) from the external communication protocol (`http`), data format (`json`).
+- **DataTransferer Interface**:
+  - Converts from external data formats to domain objects (`ad.Advertisement`, `ad.Client`).
+  - Converts from domain objects (`[]ad.Advertisement`) to the required JSON format.
+
             ```json
             {
                 "items": [

@@ -32,7 +32,9 @@ func main() {
 		log.Fatalf("DB_RETRIES format error: %s", err)
 	}
 	// define repository
-	mongoRepo := repository.NewMongo(dbUrl, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
+	writeCollection := os.Getenv("WRITE_COLLECTION")
+	readCollection := os.Getenv("READ_COLLECTION")
+	mongoRepo := repository.NewMongo(dbUrl, writeCollection, readCollection, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
 	redisHost := os.Getenv("REDIS_HOST")
 	cacheRepo := repository.NewCacheRepo(redisHost, mongoRepo)
 	// define usecase service and data transferer

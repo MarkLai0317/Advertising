@@ -82,4 +82,13 @@ func (its *RedisIntegrationTestSuite) TestWithoutCache() {
 	adSlice, err := cacheRepo.GetAdvertisements(&adClient, now)
 	its.Equal(nil, err, "error getting ads")
 	its.Equal([]ad.Advertisement{{}}, adSlice)
+
+	clientBytes, _ := json.Marshal(adClient)
+	redisAdSliceStr, err := its.testRedisClient.Get(context.Background(), string(clientBytes)).Result()
+
+	// check if cached successfully
+	var redisAdSlice []ad.Advertisement
+	err = json.Unmarshal([]byte(redisAdSliceStr), &redisAdSlice)
+	its.Nil(err, "error unmarshalling redisAdSlice")
+	its.Equal([]ad.Advertisement{{}}, redisAdSlice)
 }
