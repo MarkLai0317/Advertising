@@ -36,14 +36,20 @@ func main() {
 	readCollection := os.Getenv("READ_COLLECTION")
 	dbName := os.Getenv("DB_NAME")
 	mongoRepo := repository.NewMongo(dbUrl, dbName, writeCollection, readCollection, time.Duration(dbTimeoutSecond)*time.Second, dbRetries)
-	redisHost := os.Getenv("REDIS_HOST")
-	redisPoolSize, err := strconv.Atoi(os.Getenv("REDIS_POOL_SIZE"))
-	if err != nil {
-		log.Fatalf("REDIS_POOL_SIZE format error: %s", err)
+	var usedRepo ad.Repository
+	usedRepo = mongoRepo
+	if os.Getenv("USE_CACHE") == "TRUE" {
+		redisHost := os.Getenv("REDIS_HOST")
+		redisPoolSize, err := strconv.Atoi(os.Getenv("REDIS_POOL_SIZE"))
+		if err != nil {
+			log.Fatalf("REDIS_POOL_SIZE format error: %s", err)
+		}
+		cacheRepo := repository.NewCacheRepo(redisHost, redisPoolSize, mongoRepo)
+		usedRepo = cacheRepo
 	}
-	cacheRepo := repository.NewCacheRepo(redisHost, redisPoolSize, mongoRepo)
+
 	// define usecase service and data transferer
-	adService := ad.NewService(cacheRepo)
+	adService := ad.NewService(usedRepo)
 	dataTransferer := controller.NewAdDataTransferer()
 	// inject to controller
 	adController := controller.NewAdvertisementController(adService, dataTransferer)
