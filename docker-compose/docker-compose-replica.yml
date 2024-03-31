@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongo1:
+    image: laimark/mongo:cqrs
+    container_name: mongo1
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo:/data/db
+    ports:
+      - "27017:27017"
+    command: --replSet rs0 --keyFile /etc/mongo/mongodb-keyfile
+    networks:
+      - cluster-network
+    restart: on-failure
+
+volumes:
+  mongo:
+    name: mongo
+
+networks:
+  cluster-network:
+    name: cluster-network

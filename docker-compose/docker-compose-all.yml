@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongo1:
+    image: laimark/mongo:cqrs
+    container_name: mongo1
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo:/data/db
+    ports:
+      - "27017:27017"
+    command: --replSet rs0 --keyFile /etc/mongo/mongodb-keyfile
+    networks:
+      - cluster-network
+    restart: on-failure
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - cluster-network
+    restart: on-failure
+
+  ad-server:
+    image: laimark/advertising:ad-server
+    container_name: ad-server
+    volumes:
+      - ~/.ad_env:/app/.env  # Mount the .env file from the host
+    ports:
+      - "80:80"  # Map port 80 on the host to port 80 in the container
+    networks:
+      - cluster-network
+    restart: on-failure
+
+  syncer:
+    image: laimark/advertising:syncer
+    container_name: syncer
+    volumes:
+      - ~/.sync_env:/app/.env  # Mount the .env file from the host
+    networks:
+      - cluster-network
+    restart: on-failure
+
+volumes:
+  mongo:
+    name: mongo
+
+networks:
+  cluster-network:
+    name: cluster-network
