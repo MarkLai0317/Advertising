@@ -273,6 +273,10 @@ func GetAdvertisementsTestCases() map[string]GetAdvertisementsTestCase {
 						EndAt: time.Date(5000, 2, 1, 0, 0, 0, 0, time.UTC),
 					},
 					{
+						Title: "integration test 3: third doc",
+						EndAt: time.Date(5000, 3, 1, 0, 0, 0, 0, time.UTC),
+					},
+					{
 						Title: "integration test 4: forth doc",
 						EndAt: time.Date(5000, 4, 1, 0, 0, 0, 0, time.UTC),
 					},
