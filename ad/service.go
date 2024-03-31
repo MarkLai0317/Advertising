@@ -174,7 +174,7 @@ func ValidateClient(client *Client) error {
 		return fmt.Errorf("invalid offset")
 	}
 
-	if client.Limit < 1 {
+	if client.Limit < 1 || client.Limit > 100 {
 		return fmt.Errorf("invalid limit")
 	}
 
