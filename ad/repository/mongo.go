@@ -143,7 +143,7 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 	return adSlice, nil
 }
 
-// use exist if param missing
+// create query if the parama exist
 func buildMongoQuery(client *ad.Client, now time.Time) bson.D {
 
 	query := bson.D(make([]bson.E, 0, 5))
@@ -164,7 +164,7 @@ func buildMongoQuery(client *ad.Client, now time.Time) bson.D {
 		query = append(query, genderQuery)
 	}
 
-	if client.PlatformMissing {
+	if !client.PlatformMissing {
 		platformQuery := bson.E{"conditions.platforms", string(client.Platform)}
 		query = append(query, platformQuery)
 	}
