@@ -16,11 +16,12 @@ type CacheRepo struct {
 	mainRepo    ad.Repository
 }
 
-func NewCacheRepo(host string, mainRepo ad.Repository) *CacheRepo {
+func NewCacheRepo(host string, poolSize int, mainRepo ad.Repository) *CacheRepo {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     host,
 		Password: "",
 		DB:       0,
+		PoolSize: poolSize,
 	})
 	_, err := rdb.Ping(context.Background()).Result()
 	if err != nil {

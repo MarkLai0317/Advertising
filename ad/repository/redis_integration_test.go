@@ -59,10 +59,12 @@ func (its *RedisIntegrationTestSuite) BeforeTest(suiteName, testName string) {
 	}
 }
 
+const poolSize = 1000
+
 func (its *RedisIntegrationTestSuite) TestWithCache() {
 	adClient := ad.Client{}
 	mockRepo := advertisementMock.NewRepository(its.T())
-	cacheRepo := repository.NewCacheRepo("localhost:6379", mockRepo)
+	cacheRepo := repository.NewCacheRepo("localhost:6379", poolSize, mockRepo)
 	adSlice, err := cacheRepo.GetAdvertisements(&adClient, time.Now())
 	its.Equal(nil, err, "error getting ads")
 	its.Equal([]ad.Advertisement{{}}, adSlice)
@@ -76,7 +78,7 @@ func (its *RedisIntegrationTestSuite) TestWithoutCache() {
 	// create cache repo with injection of mockRepo
 	mockRepo := advertisementMock.NewRepository(its.T())
 	mockRepo.EXPECT().GetAdvertisements(&adClient, now).Return([]ad.Advertisement{{}}, nil).Times(1)
-	cacheRepo := repository.NewCacheRepo("localhost:6379", mockRepo)
+	cacheRepo := repository.NewCacheRepo("localhost:6379", poolSize, mockRepo)
 
 	// call GetAdvertisements with adClient
 	adSlice, err := cacheRepo.GetAdvertisements(&adClient, now)
