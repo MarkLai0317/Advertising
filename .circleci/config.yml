@@ -90,7 +90,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t laimark/advertising:latest .
+            docker build -t laimark/advertising:ad-server .
             docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
             docker push laimark/advertising:ad-server
       
@@ -129,7 +129,7 @@ workflows:
             branches:
               only:
                 - main
-      - deploy:
+      - build-and-deploy:
           requires:
             - test-go
           filters:
