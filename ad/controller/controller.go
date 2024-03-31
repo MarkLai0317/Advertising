@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/MarkLai0317/Advertising/ad"
@@ -79,10 +80,8 @@ func (c *Controller) Advertise(resp http.ResponseWriter, req *http.Request) {
 
 	_, err = resp.Write(adResponse)
 	if err != nil {
-		resp.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(resp).Encode(ServiceError{Message: fmt.Sprintf("Error writing to body %v", err.Error())})
+		log.Printf("Error writing to body: %v\n", err)
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 
 }

@@ -98,7 +98,7 @@ jobs:
       - run:
           name: Deploy to VM
           command: |
-             ssh -o StrictHostKeyChecking=no $VM_HOST "docker pull laimark/advertising:ad-server; docker rm -f ad-server; docker run --name ad-server -v ~/.ad_env:/app/.env -p 80:80 --net cluster-network -d laimark/advertising:ad-server; docker image prune -f"
+             ssh -o StrictHostKeyChecking=no $VM_HOST "docker pull laimark/advertising:ad-server; docker rm -f ad-server; docker run --name ad-server -v ~/.ad_env:/app/.env --restart=on-failure -p 80:80 --net cluster-network -d laimark/advertising:ad-server; docker image prune -f"
 
   # deploy:
   #   docker:

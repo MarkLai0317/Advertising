@@ -146,38 +146,30 @@ func (m *Mongo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Advert
 // use exist if param missing
 func buildMongoQuery(client *ad.Client, now time.Time) bson.D {
 
-	countryQuery := bson.E{"conditions.countries", string(client.Country)}
-	if client.CountryMissing {
-		countryQuery = bson.E{"conditions.countries", bson.D{{"$exists", true}}}
+	query := bson.D(make([]bson.E, 0, 5))
+	if !client.CountryMissing {
+		countryQuery := bson.E{"conditions.countries", string(client.Country)}
+		query = append(query, countryQuery)
 	}
 
-	startAtQuery := bson.E{"startAt", bson.D{{"$lte", now}}}
-
-	ageStartQuery := bson.E{"conditions.ageStart", bson.D{{"$lte", client.Age}}}
-	ageEndQuery := bson.E{"conditions.ageEnd", bson.D{{"$gte", client.Age}}}
-	if client.AgeMissing {
-		ageStartQuery = bson.E{"conditions.ageStart", bson.D{{"$exists", true}}}
-		ageEndQuery = bson.E{"conditions.ageEnd", bson.D{{"$exists", true}}}
+	if !client.AgeMissing {
+		ageStartQuery := bson.E{"conditions.ageStart", bson.D{{"$lte", client.Age}}}
+		ageEndQuery := bson.E{"conditions.ageEnd", bson.D{{"$gte", client.Age}}}
+		query = append(query, ageStartQuery)
+		query = append(query, ageEndQuery)
 	}
 
-	genderQuery := bson.E{"conditions.genders", string(client.Gender)}
-	if client.GenderMissing {
-		genderQuery = bson.E{"conditions.genders", bson.D{{"$exists", true}}}
+	if !client.GenderMissing {
+		genderQuery := bson.E{"conditions.genders", string(client.Gender)}
+		query = append(query, genderQuery)
 	}
 
-	platformQuery := bson.E{"conditions.platforms", string(client.Platform)}
 	if client.PlatformMissing {
-		platformQuery = bson.E{"conditions.platforms", bson.D{{"$exists", true}}}
+		platformQuery := bson.E{"conditions.platforms", string(client.Platform)}
+		query = append(query, platformQuery)
 	}
 
-	return bson.D{
-		countryQuery,
-		startAtQuery,
-		ageStartQuery,
-		ageEndQuery,
-		genderQuery,
-		platformQuery,
-	}
+	return query
 }
 
 // func constructClientQuery(client *ad.Client){

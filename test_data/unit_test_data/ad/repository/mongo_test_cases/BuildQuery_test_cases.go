@@ -31,7 +31,6 @@ func BuildQueryTestCases() map[string]BuildQueryTestCase {
 			},
 			Expects: bson.D{
 				{"conditions.countries", "TW"},
-				{"startAt", bson.D{{"$lte", time.Date(2022, 2, 1, 0, 0, 0, 0, time.UTC)}}},
 				{"conditions.ageStart", bson.D{{"$lte", 20}}},
 				{"conditions.ageEnd", bson.D{{"$gte", 20}}},
 				{"conditions.genders", "M"},
@@ -48,14 +47,7 @@ func BuildQueryTestCases() map[string]BuildQueryTestCase {
 				},
 				Now: time.Date(2022, 2, 1, 0, 0, 0, 0, time.UTC),
 			},
-			Expects: bson.D{
-				{"conditions.countries", bson.D{{"$exists", true}}},
-				{"startAt", bson.D{{"$lte", time.Date(2022, 2, 1, 0, 0, 0, 0, time.UTC)}}},
-				{"conditions.ageStart", bson.D{{"$exists", true}}},
-				{"conditions.ageEnd", bson.D{{"$exists", true}}},
-				{"conditions.genders", bson.D{{"$exists", true}}},
-				{"conditions.platforms", bson.D{{"$exists", true}}},
-			},
+			Expects: bson.D{},
 		},
 	}
 
