@@ -47,7 +47,7 @@ func (c *CacheRepo) GetAdvertisements(client *ad.Client, now time.Time) ([]ad.Ad
 			return nil, fmt.Errorf("error getting ads from main repo: %w", err)
 		}
 		adSliceBytes, _ := json.Marshal(adSlice)
-		if err := c.redisClient.Set(context.Background(), string(redisKey), adSliceBytes, 0).Err(); err != nil {
+		if err := c.redisClient.Set(context.Background(), string(redisKey), adSliceBytes, 15*time.Second).Err(); err != nil {
 			return nil, fmt.Errorf("error setting ads in redis: %w", err)
 		}
 		return adSlice, nil
