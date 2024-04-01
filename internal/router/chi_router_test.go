@@ -26,7 +26,7 @@ func TestChiRouterUnitTestSuite(t *testing.T) {
 }
 
 func (uts *ChiRouterUnitTestSuite) TestGet() {
-	chiRouter := router.NewChiAdapter()
+	chiRouter := router.NewChiRouter()
 	helloWorldHandler := func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, world!")
 	}
@@ -60,7 +60,7 @@ func (uts *ChiRouterUnitTestSuite) TestGet() {
 
 func (uts *ChiRouterUnitTestSuite) TestPost() {
 	// Create test router with Post handler
-	chiRouter := router.NewChiAdapter()
+	chiRouter := router.NewChiRouter()
 	helloWorldHandler := func(w http.ResponseWriter, r *http.Request) {
 		// Read and return body
 		body, err := io.ReadAll(r.Body)
@@ -123,7 +123,7 @@ func (its *ChiRouterIntegrationTestSuite) TestUseMultilayerURL() {
 	}
 
 	// init router
-	chiRouter := router.NewChiAdapter()
+	chiRouter := router.NewChiRouter()
 	// Applying middleware to a specific path prefix
 
 	chiRouter.Use("/protected1", testMiddleware1)

@@ -54,11 +54,12 @@ func main() {
 	// inject to controller
 	adController := controller.NewAdvertisementController(adService, dataTransferer)
 	// define router
-	adRouter := router.NewChiAdapter()
+	adRouter := router.NewChiRouter()
 	defineAPI(adRouter, adController)
 
 }
 
+// define route for API
 func defineAPI(adRouter router.WebFramework, adController *controller.Controller) {
 	adRouter.Post("/api/v1/ad", adController.CreateAdvertisement)
 	adRouter.Get("/api/v1/ad", adController.Advertise)

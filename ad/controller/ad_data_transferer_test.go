@@ -16,7 +16,7 @@ import (
 	"github.com/MarkLai0317/Advertising/ad"
 	"github.com/MarkLai0317/Advertising/ad/controller"
 
-	"github.com/MarkLai0317/Advertising/test_data/unit_test_data/ad/controller/data_transfer_test_cases"
+	data_transfer_test_cases "github.com/MarkLai0317/Advertising/test_data/unit_test_data/ad/controller/ad_data_transfer_test_cases"
 
 	"github.com/agiledragon/gomonkey/v2"
 	"github.com/stretchr/testify/suite"
@@ -110,16 +110,17 @@ func (uts *DataTransferUnitTestSuite) TestQueryToClient() {
 }
 
 func (uts *DataTransferUnitTestSuite) TestAdvertisementSliceToJSON() {
+	// set stub
 	patches := gomonkey.NewPatches()
 	defer patches.Reset()
 
-	//tempAd := &controller.AdvertisementJSON{}
 	patches.ApplyMethod(reflect.TypeOf(controller.ResponseTime{}), "MarshalJSON", func(rt controller.ResponseTime) ([]byte, error) {
 		t := time.Time(rt)
 		formattedTime := t.Format("2006-01-02T15:04:05.000Z") // Adjust the layout according to your requirement
 		return []byte(fmt.Sprintf(`"%s"`, formattedTime)), nil
 	})
 
+	// get test case
 	testCases := data_transfer_test_cases.AdvertisementSliceToJSONTestCases()
 	for name, tc := range testCases {
 		uts.Run(name, func() {

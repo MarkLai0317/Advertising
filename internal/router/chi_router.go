@@ -17,7 +17,7 @@ type ChiRouter struct {
 	Router *chi.Mux
 }
 
-func NewChiAdapter() WebFramework {
+func NewChiRouter() WebFramework {
 	return &ChiRouter{Router: chi.NewRouter()}
 }
 
@@ -33,21 +33,7 @@ func (chiRouter *ChiRouter) Post(path string, handlerFunc http.HandlerFunc) {
 	chiRouter.Router.Post(path, handlerFunc)
 }
 
-// Use now accepts a pathPrefix. Middleware is applied only to paths with pathPrefix
-// func (chiRouter *ChiRouter) Use(pathPrefix string, middleware MiddlewareFunc) {
-// 	if pathPrefix == "" { // If no pathPrefix is specified, apply middleware globally.
-// 		chiRouter.Router.Use(func(next http.Handler) http.Handler {
-// 			return middleware(next.ServeHTTP)
-// 		})
-// 	} else { // Apply middleware only to paths with the specified prefix.
-// 		chiRouter.Router.Route(pathPrefix, func(r chi.Router) {
-// 			r.Use(func(next http.Handler) http.Handler {
-// 				return middleware(next.ServeHTTP)
-// 			})
-// 		})
-// 	}
-// }
-
+// provide routes for middleeware to be applied to
 func (chiRouter *ChiRouter) Use(pathPrefix string, middleware func(http.Handler) http.Handler) {
 	if pathPrefix == "" {
 		// Apply middleware globally
@@ -109,15 +95,15 @@ func (chiRouter *ChiRouter) ListenAndServe(port string, options ...ServerOption)
 }
 
 // WithReadTimeout configure http.Server parameter ReadTimeout
-func WithReadTimeout(t time.Duration) ServerOption {
-	return func(srv *http.Server) {
-		srv.ReadTimeout = t
-	}
-}
+// func WithReadTimeout(t time.Duration) ServerOption {
+// 	return func(srv *http.Server) {
+// 		srv.ReadTimeout = t
+// 	}
+// }
 
-// WithWriteTimeout configure http.Server parameter WriteTimeout
-func WithWriteTimeout(t time.Duration) ServerOption {
-	return func(srv *http.Server) {
-		srv.WriteTimeout = t
-	}
-}
+// // WithWriteTimeout configure http.Server parameter WriteTimeout
+// func WithWriteTimeout(t time.Duration) ServerOption {
+// 	return func(srv *http.Server) {
+// 		srv.WriteTimeout = t
+// 	}
+// }
