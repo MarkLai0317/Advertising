@@ -546,9 +546,9 @@ https://github.com/MarkLai0317/Advertising-CQRS
 
     ```
 2. **step 2**
-    - run command to use the script.lua
+    - run command to use the script.lua  (don't set -c to too big or wrk will timeout the connection by itserf,**not problem of server**)
     ```bash
-    wrk2 -t20 -c1000 -d30s -R20000 -s script.lua http://35.234.12.24:80
+    wrk -t20 -c1000 -d30s -R20000 -s script.lua http://35.234.12.24:80
     ```
 3. The stress testing output
     ```txt
