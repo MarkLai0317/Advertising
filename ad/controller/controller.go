@@ -36,7 +36,7 @@ func (c *Controller) CreateAdvertisement(resp http.ResponseWriter, req *http.Req
 	resp.Header().Set("Content-Type", "application/json")
 	newAd, err := c.DataTransferer.JSONToAdvertisement(req)
 	if err != nil {
-		resp.WriteHeader(http.StatusInternalServerError)
+		resp.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(resp).Encode(ServiceError{Message: fmt.Sprintf("Error JSON to advertisement: %v", err.Error())})
 		return
 	}
@@ -44,7 +44,7 @@ func (c *Controller) CreateAdvertisement(resp http.ResponseWriter, req *http.Req
 	err = c.AdService.CreateAd(newAd)
 
 	if err != nil {
-		resp.WriteHeader(http.StatusInternalServerError)
+		resp.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(resp).Encode(ServiceError{Message: fmt.Sprintf("Error creating advertisement: %v", err.Error())})
 		return
 	}
@@ -59,14 +59,14 @@ func (c *Controller) Advertise(resp http.ResponseWriter, req *http.Request) {
 	client, err := c.DataTransferer.QueryToClient(req)
 	if err != nil {
 		// Use http.Error to send the error message back to the client
-		resp.WriteHeader(http.StatusInternalServerError)
+		resp.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(resp).Encode(ServiceError{Message: fmt.Sprintf("Error decode url query: %v", err.Error())})
 		return
 	}
 
 	adSlice, err := c.AdService.Advertise(client)
 	if err != nil {
-		resp.WriteHeader(http.StatusInternalServerError)
+		resp.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(resp).Encode(ServiceError{Message: fmt.Sprintf("Error getting ad: %v", err.Error())})
 		return
 	}

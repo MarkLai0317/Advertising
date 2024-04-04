@@ -76,7 +76,7 @@ func CreateAdvertisementTestCases() map[string]CreateAdvertisementTestCase {
 			JsonToAdCalled: true,
 			JsonToAdError:  fmt.Errorf("error decoding JSON"),
 			Expects: CreateAdvertisementExpects{
-				StatusCode:   http.StatusInternalServerError,
+				StatusCode:   http.StatusBadRequest,
 				ErrorMessage: "Error JSON to advertisement:",
 			},
 		},
@@ -87,7 +87,7 @@ func CreateAdvertisementTestCases() map[string]CreateAdvertisementTestCase {
 			CreateAdCalled: true,
 			CreateAdError:  fmt.Errorf("error creating advertisement"),
 			Expects: CreateAdvertisementExpects{
-				StatusCode:   http.StatusInternalServerError,
+				StatusCode:   http.StatusBadRequest,
 				ErrorMessage: "Error creating advertisement:",
 			},
 		},
@@ -101,25 +101,3 @@ func newCreateAdvertisementRequest(method string, url string, body string) *http
 	req.Header.Set("Content-Type", "application/json")
 	return req
 }
-
-// testCases := []struct {
-// 	name              string
-// 	dataTransfererErr error
-// 	adServiceErr      error
-// 	expectedCode      int
-// }{
-// 	{
-// 		name:         "SuccessfulCreation",
-// 		expectedCode: http.StatusOK,
-// 	},
-// 	{
-// 		name:              "ErrorJSONToAdvertisement",
-// 		dataTransfererErr: errors.New("error decoding JSON"),
-// 		expectedCode:      http.StatusInternalServerError,
-// 	},
-// 	{
-// 		name:         "ErrorCreatingAdvertisement",
-// 		adServiceErr: errors.New("error creating advertisement"),
-// 		expectedCode: http.StatusInternalServerError,
-// 	},
-// }

@@ -92,7 +92,7 @@ func ValidateAdvertisement(advertisement *Advertisement, validator Validator) er
 		return fmt.Errorf("endAt cannot be smaller than current Time %s", now.Format("2006-01-02T15:04:05.000Z"))
 	}
 
-	if advertisement.StartAt.After(advertisement.EndAt) {
+	if !advertisement.StartAt.Before(advertisement.EndAt) {
 		return fmt.Errorf("endAt cannot be smaller than StartAt")
 	}
 
