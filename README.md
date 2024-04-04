@@ -5,6 +5,103 @@
 - CircleCI
 - Docker, docker-compose
 
+## API 
+- can download PostMan template in [google drive](https://drive.google.com/file/d/1mfPPtvRQh6JpsWsjkPjbaCnLtzkZskoW/view?usp=sharing)
+- can call api on host `http://35.234.12.24:80` like below
+- **GET**
+    ```
+    http://35.234.12.24:80/api/v1/ad?offset=0&limit=5&age=90&gender=M&platform=ios&country=TW
+    ```
+    - parameters
+        - `offset` : int  >= 0 (default 0 if not given)
+        - `limit` : int 1 ~ 100 (default 5 if not given)
+        - `age` : int 1 ~ 100
+        - `gender` : "M" or "F"
+        - `platform` : "ios" or "android" or "web"
+        - `country` : "TW" or "US" or "JP" or all country in` ISO 3166-1 `
+    - response 
+        - if success: status code `200` with body
+            ```json
+            {
+                "items": [
+                    {
+                        "title": "active 733",
+                        "endAt": "2024-04-05T00:00:00.000Z"
+                    },
+                    {
+                        "title": "active 292",
+                        "endAt": "2024-04-09T00:00:00.000Z"
+                    },
+                    {
+                        "title": "active 566",
+                        "endAt": "2024-04-10T00:00:00.000Z"
+                    },
+                    {
+                        "title": "active 683",
+                        "endAt": "2024-04-14T00:00:00.000Z"
+                    },
+                    {
+                        "title": "active 714",
+                        "endAt": "2024-04-16T00:00:00.000Z"
+                    }
+                ]
+            }
+            ```
+        - if has invalid param : status code `400` with body
+            ```json
+            {
+                "message": "Error message"
+            }
+            ```
+- **POST**
+    ```
+    http://35.234.12.24:80/api/v1/ad
+    ```
+    - Request Body
+        ```json
+        {
+            
+            "title":"AD 1",
+            "startAt":"2025-12-10T03:00:00.000Z",
+            "endAt":"2025-12-31T16:00:00.000Z",
+            "conditions": {
+                "ageStart": 1,
+                "ageEnd": 100,
+                "gender":["M"],
+                "country": ["TW", "JP"],
+                "platform": ["ios", "android"]
+            } 
+
+        }
+        ```
+        - if `startAt <= time.Now()` on sever, startAt will be set to `time.now()`
+        - `title`: must be provided 
+        - `startAt`: 
+            - default `time.Now()` if not provided
+            - if < `time.Now()` will be set to `time.Now()`
+            - must < `startAt`
+
+        - `endAt`: 
+            - must  > `startAt`
+            - must > `time.Now()`
+        - **parameters in conditions are optional**
+        - default of `confitions` if not povided:
+            - `ageStart` : 1
+            - `ageEnd`: 100
+            - `gender`: ["M", "F"]
+            - `country`: array of all countries in `ISO 3166-1`
+    - response:
+        - if **success**: status code `200`
+        - if invalid Advertisement:
+            - status code `400` with body
+                ```json
+                {
+                    "message": "Error message"
+                }
+                ```
+
+            
+
 ## Go Server Design
 
 ![Go Server design](_assets/System_Design.png)
@@ -38,7 +135,7 @@ This project consists of the `main` package and four other key packages:`router`
 
 ### `package controller` (Handles Communication with External Clients like API caller for the `Ad domain`)
 - **folder : /ad/controller**
-- Isolates core business logic (`ad`) from the external communication protocol (`http`), data format (`json`).
+- Isolated core business logic (`ad`) from the external communication protocol (`http`) and data format (`json`).
 - **`DataTransferer Interface`**: `/ad/controller/controller.go`
   - Converts from external data formats to domain objects (`ad.Advertisement`, `ad.Client`).
   - Converts from domain objects (`[]ad.Advertisement`) to the required JSON format for user.
@@ -260,6 +357,8 @@ This project consists of the `main` package and four other key packages:`router`
 
 # System Design with CQRS pattern
 ![system design](_assets/CQRS.png)
+### See Data synchronizer design in another repo
+https://github.com/MarkLai0317/Advertising-CQRS
 
 
 
@@ -418,8 +517,35 @@ This project consists of the `main` package and four other key packages:`router`
 
 # how to run this project
 run the following step by step
-### 0. set up environment files in main server
-(host1 is the ip of your main server where you will run docker-compose-all.yml, host2 and host3 are the server ip where you will run the docker-compose-replica.yml to prepare for the MongoDB replicaSet)
+
+
+### A.  MongoDB ReplicaSet setup
+
+1. create `.env` file on 3 nodes: [host1] [host2] [host3] with username and yourpassword variable
+    ```
+    MONGO_INITDB_ROOT_USERNAME=[username]
+    MONGO_INITDB_ROOT_PASSWORD=[yourpassword]
+
+    ```
+
+
+2. run the `docker-compose-replica.yml` in `/docker-compose` on [host2] and [host3], with command :
+(remember copy `/docker-compose/docker-compose-replica.yml` to your machine)
+    ```
+    docker-compose -f docker-compose-replica.yml up -d
+    ```
+
+3. 
+```
+docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: '35.234.12.24:27017'}]})"
+```
+
+```
+docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "cfg = rs.conf(); cfg.members[0].priority = 1; cfg.members[1].priority = 0.05; cfg.members[2].priority = 0.05; rs.reconfig(cfg);"
+```
+
+### B. set up other environment files on [host1]
+
 - remember to change the `[host1]`, `[host2]`, `[host3]`, `[username]` and `[yourpassword]`
 - `.ad_env`
     ```
@@ -445,16 +571,31 @@ run the following step by step
     ```
     
 
-### 1. docker compose
-- run the `docker-compose-all.yml` in `/docker-compose` directory
+### C. run the main docker-compose to start MongoDB, go-server, and data-syncer on [host1]
+- run the `docker-compose-all.yml` in `/docker-compose` directory on [host1]
     ```
     docker-compose -f docker-compose/docker-compose-all.yml up -d
     ```
+- initiate the replicaSet on [host1]
+    ```
+    docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: '[host1]:27017'}]})"
+    ```
+    **(change [host1] to your ip, and change [username] and [yourpassword] according to your config)**
 
-### 2. MongoDB ReplicaSet setup
-```
-docker exec -it mongo1 mongosh -u username -p yourpassword --authenticationDatabase admin --eval  "cfg = rs.conf(); cfg.members[0].priority = 1; cfg.members[1].priority = 0.05; cfg.members[2].priority = 0.05; rs.reconfig(cfg);"
-```
+- add previous 2 hosts to replicaSet
+    ```
+    docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host2]:27017')"
+    ```
+     ```
+    docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host3]:27017')"
+    ```
+
+-  set replicaSet priority on [host1]
+    ```
+    docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "cfg = rs.conf(); cfg.members[0].priority = 1; cfg.members[1].priority = 0.05; cfg.members[2].priority = 0.05; rs.reconfig(cfg);"
+    ```
+
+
 
     
 
