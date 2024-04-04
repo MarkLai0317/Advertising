@@ -234,6 +234,9 @@ This project consists of the `main` package and four other key packages:`router`
 
 # Test (with CircleCI)
 
+run `go mod download` first if want to test locally
+
+
 ### Table Driven Test
 - For different testcases of each UnitTest and IntegrationTest, I define functions in `test_data` folder to generate testCases that return `map[string]TestCases`. And call them in `*_test.go`
     - **example**:
@@ -365,13 +368,13 @@ This project consists of the `main` package and four other key packages:`router`
 
 - if want to test locally
     - **prepare**
-        -  run `laimark/advertising:test-db` (MongoDB) and `redis:alpine` images from Docker Hub (I have set my image as public)
+        1.  run `laimark/advertising:test-db` (MongoDB) and `redis:alpine` images from Docker Hub (I have set my image as public)
             - remember to bind port 27017:27017 for `laimark/advertising:test-db` and 6379:6379 for `redis:alpine`
-        - create `.env` for main.go for test (this is not the same as the one used in later docker-compose)
+        2. create `.env` for main.go for test (this is not the same as the one used in later docker-compose)
             ```
             echo $'DB_URL=mongodb://mark:markpwd@localhost:27017\nREDIS_HOST=localhost:6379\nREDIS_POOL_SIZE=1000\nDB_TIMEOUT_SECOND=5\nDB_RETRIES=1\nWRITE_COLLECTION=advertisement\nREAD_COLLECTION=advertisement\nDB_NAME=advertising\nPORT=80' > .env
             ```
-        -  run `main.go`
+        3.  run `main.go`
             ```go run main.go ```
     - run test
         ```
