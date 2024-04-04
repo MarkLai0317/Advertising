@@ -4,6 +4,7 @@
 - MongoDB ReplicaSet
 - CircleCI
 - Docker, docker-compose
+- gotestsum
 
 ## API 
 - can download PostMan template in [google drive](https://drive.google.com/file/d/1mfPPtvRQh6JpsWsjkPjbaCnLtzkZskoW/view?usp=sharing)
