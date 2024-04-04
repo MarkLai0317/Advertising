@@ -594,14 +594,6 @@ run the following step by step
     docker-compose -f docker-compose-replica.yml up -d
     ```
 
-3. 
-```
-docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: '35.234.12.24:27017'}]})"
-```
-
-```
-docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "cfg = rs.conf(); cfg.members[0].priority = 1; cfg.members[1].priority = 0.05; cfg.members[2].priority = 0.05; rs.reconfig(cfg);"
-```
 
 ### B. set up other environment files on [host1]
 
