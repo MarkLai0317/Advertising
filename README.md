@@ -15,13 +15,13 @@
     ```
     http://35.234.12.24:80/api/v1/ad?offset=0&limit=5&age=90&gender=M&platform=ios&country=TW
     ```
-    - parameters
+    - parameters (all optional)
         - `offset` : int  >= 0 (default 0 if not given)
         - `limit` : int 1 ~ 100 (default 5 if not given)
         - `age` : int 1 ~ 100
         - `gender` : "M" or "F"
         - `platform` : "ios" or "android" or "web"
-        - `country` : "TW" or "US" or "JP" or all country in` ISO 3166-1 `
+        - `country` : "TW" or "US" or "JP" or all other countries in` ISO 3166-1 `
     - response 
         - if success: status code `200` with body
             ```json
