@@ -550,6 +550,7 @@ https://github.com/MarkLai0317/Advertising-CQRS
     ```bash
     wrk -t20 -c1000 -d30s -R20000 -s script.lua http://35.234.12.24:80
     ```
+    - if there are timeout connections, try set -c to lower value.
 3. The stress testing output
     ```txt
     Running 30s test @ http://35.234.12.24:80
