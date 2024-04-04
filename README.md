@@ -9,6 +9,8 @@
 ## API 
 - can download PostMan template in [google drive](https://drive.google.com/file/d/1mfPPtvRQh6JpsWsjkPjbaCnLtzkZskoW/view?usp=sharing)
 - can call api on host `http://35.234.12.24:80` like below
+- I have delete ads in db. Feel free to add active and non-active advertisements with API.
+- **My server only has 8GB space so don't add too much data**
 - **GET**
     ```
     http://35.234.12.24:80/api/v1/ad?offset=0&limit=5&age=90&gender=M&platform=ios&country=TW
