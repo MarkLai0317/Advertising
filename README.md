@@ -580,13 +580,16 @@ run the following step by step
 
 ### A.  MongoDB ReplicaSet setup
 
-1. create `.env` file on 3 nodes: [host1] [host2] [host3] with username and yourpassword variable
+1. **create `.env` file at home directory(`~/`)** on 3 nodes: [host1] [host2] [host3] with username and yourpassword variable
     ```
     MONGO_INITDB_ROOT_USERNAME=[username]
     MONGO_INITDB_ROOT_PASSWORD=[yourpassword]
-
     ```
-
+    - host1,2,3 use ip address is recommended
+    - **if just want to run on one node** (host1)  (performance worse than multi node)
+        1. **replace [host1] as `mongo1`**
+        2. **skip step2**
+ 
 
 2. run the `docker-compose-replica.yml` in `/docker-compose` on [host2] and [host3], with command :
 (remember copy `/docker-compose/docker-compose-replica.yml` to your machine)
@@ -597,7 +600,7 @@ run the following step by step
 
 ### B. set up other environment files on [host1]
 
-- remember to change the `[host1]`, `[host2]`, `[host3]`, `[username]` and `[yourpassword]`
+- remember to change the `[host1]`, `[host2]`, `[host3]`, `[username]` and `[yourpassword]` **(don't use localhost as host1, host2, host3)**
 - `.ad_env`
     ```
     DB_URL=mongodb://[username]:[yourpassword]@[host1]:27017,[host2]:27017,[host3]:27017/?replicaSet=rs0&readPreference=secondaryPreferred
@@ -631,9 +634,9 @@ run the following step by step
     ```
     docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: '[host1]:27017'}]})"
     ```
-    **(change [host1] to your ip, and change [username] and [yourpassword] according to your config)**
-
-- add previous 2 hosts to replicaSet
+    - **(change [host1] to your ip or container name if only one node, and change [username] and [yourpassword] according to your config)**
+ 
+- add previous 2 hosts to replicaSet **(can skip this if only one node)**
     ```
     docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host2]:27017')"
     ```
@@ -641,7 +644,7 @@ run the following step by step
     docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host3]:27017')"
     ```
 
--  set replicaSet priority on [host1]
+-  set replicaSet priority on [host1] **(can skip this if only one node)**
     ```
     docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "cfg = rs.conf(); cfg.members[0].priority = 1; cfg.members[1].priority = 0.05; cfg.members[2].priority = 0.05; rs.reconfig(cfg);"
     ```
