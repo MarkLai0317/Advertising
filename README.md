@@ -602,7 +602,7 @@ run the following step by step
 ### B. set up other environment files on [host1]
 
 - remember to change the `[host1]`, `[host2]`, `[host3]`, `[username]` and `[yourpassword]` **(don't use localhost as host1, host2, host3)**
-- `.ad_env`
+- `.ad_env`: put in `~/` in [host1] (can delete `[host2]:27017` and `[host3]:27017` if just 1 node)
     ```
     DB_URL=mongodb://[username]:[yourpassword]@[host1]:27017,[host2]:27017,[host3]:27017/?replicaSet=rs0&readPreference=secondaryPreferred
     DB_NAME=advertising
@@ -615,7 +615,7 @@ run the following step by step
     USE_CACHE=FALSE
     PORT=80
     ```
-- `.sync_env`
+- `.sync_env`: put in `~/` in [host1]
     ```
     DB_NAME=advertising
     COMMAND_DB_URL=mongodb://[username]:[yourpassword]@mongo1:27017
@@ -637,7 +637,7 @@ run the following step by step
     ```
     - **(change [host1] to your ip or container name if only one node, and change [username] and [yourpassword] according to your config)**
  
-- add previous 2 hosts to replicaSet **(can skip this if only one node)**
+- add previous 2 hosts to replicaSet on [host1] **(can skip this if only one node)**
     ```
     docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host2]:27017')"
     ```
