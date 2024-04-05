@@ -639,10 +639,10 @@ run the following step by step
  
 - add previous 2 hosts to replicaSet on [host1] **(can skip this if only one node)**
     ```
-    docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host2]:27017')"
+    docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host2]:27017')"
     ```
      ```
-    docker exec -it mongo1 [username] -u mark -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host3]:27017')"
+    docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval  "rs.add('[host3]:27017')"
     ```
 
 -  set replicaSet priority on [host1] **(can skip this if only one node)**
