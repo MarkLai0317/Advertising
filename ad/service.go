@@ -136,13 +136,7 @@ func (s *Service) Advertise(client *Client) ([]Advertisement, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid client: %w", err)
 	}
-	// if offset < 0 {
-	// 	return nil, fmt.Errorf("offset cannot less than 0")
-	// }
 
-	// if limit < 1 {
-	// 	return nil, fmt.Errorf("limit cannot less than 1")
-	// }
 	adSlice, err := s.repo.GetAdvertisements(client, time.Now())
 
 	if err != nil {
@@ -181,9 +175,3 @@ func ValidateClient(client *Client) error {
 	return nil
 
 }
-
-// high level public function defined first
-// if interface as param, define interface first
-// helper and private function called by high level function define below ordered by called order
-
-// do the same for each public function

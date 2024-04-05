@@ -21,11 +21,6 @@ func ValidGender(gender GenderType) bool {
 	return validGender[gender]
 }
 
-// var StringToGenderType = map[string]GenderType{
-// 	"M": Male,
-// 	"F": Female,
-// }
-
 func AllGenders() []GenderType {
 	return []GenderType{
 		Male, Female,
@@ -50,18 +45,6 @@ var validPlatform = map[PlatformType]bool{
 func ValidPlatform(platform PlatformType) bool {
 	return validPlatform[platform]
 }
-
-// var StringToPlatformType = map[string]PlatformType{
-// 	"android": Android,
-// 	"ios":     Ios,
-// 	"web":     Web,
-// }
-
-// func AllGenders() []GenderType {
-// 	return []GenderType{
-// 		Male, Female,
-// 	}
-// }
 
 func AllPlatforms() []PlatformType {
 	return []PlatformType{
