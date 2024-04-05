@@ -1,6 +1,6 @@
 # Advertising
 
-## tool used in this project
+## Tools used in this project
 - MongoDB ReplicaSet
 - CircleCI
 - Docker, docker-compose
