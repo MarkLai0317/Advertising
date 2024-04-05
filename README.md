@@ -88,7 +88,7 @@
             - must  > `startAt`
             - must > `time.Now()`
         - **parameters in conditions are optional**
-        - default of `confitions` if not povided:
+        - default of `conditions` if not povided:
             - `ageStart` : 1
             - `ageEnd`: 100
             - `gender`: ["M", "F"]
@@ -183,7 +183,7 @@ This project consists of the `main` package and four other key packages:`router`
        **can decouple the naming and format of data from domain object and the input, return format of API**.
     - implement `GetAdvertisement` and `CreateAdvertisements` that is called by `Service struct` to interact with MongoDB
 - **`Redis Struct`**
-    - can accept a `Repository interface` 
+    - can accept a implementation of the `Repository interface` 
     - **implement `GetAdvertisements`**
         - if the cache doesn't exist call the regular `GetAdvertisements method` of injected `Repository interface`
          - if the cache exist return the data in Redis.
@@ -398,7 +398,7 @@ https://github.com/MarkLai0317/Advertising-CQRS
 - **the Active Request is less than 1000**
     - faster query to only store these 1000 Ads in seperate collection (database if using RDBMS)  instead of query from collection with hundreds of thousands of Ads.
 - **number of Post Request won't be greater than 3000 for each day**
-    - the stress and the PS of the Post request isn't the main consideration in this system 
+    - the stress and the RPS of the Post request isn't the main consideration in this system 
 
 
 
