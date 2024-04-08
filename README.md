@@ -93,6 +93,8 @@
             - `ageEnd`: 100
             - `gender`: ["M", "F"]
             - `country`: array of all countries in `ISO 3166-1`
+            - `platform`: ["ios", "android", "web"]
+        - **API will ignore the parameters key that is not defined in the spec.**
     - response:
         - if **success**: status code `200`
         - if invalid Advertisement:
@@ -631,7 +633,7 @@ run the following step by step
     ```
     docker-compose -f docker-compose/docker-compose-all.yml up -d
     ```
-- initiate the replicaSet on [host1]
+- initiate the replicaSet on [host1]  (don't use localhost as [host1], use ip address is preferred)
     ```
     docker exec -it mongo1 mongosh -u [username] -p [yourpassword] --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: '[host1]:27017'}]})"
     ```
